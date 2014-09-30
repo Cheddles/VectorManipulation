@@ -1,7 +1,7 @@
 class AxisAngle{
   int xPos;  // x-coordinate of top right corner
   int yPos;  // y-coordinate of top right corner
-  float bPrime=PI/6;  // offset angle (clockwise from straight up)
+  float bPrime=0;  // offset angle (clockwise from straight up)
   float oldAngle;  // previous bPrime (to be used if angle change is cancelled
   boolean selected=false;  // shows and adjustable only when selected
   boolean dragging=false;
@@ -18,32 +18,10 @@ class AxisAngle{
       fill(255,255,255,150);
       strokeWeight(0);
       rect(0,0,width,height);
+      drawRotator();
     }
-    
     drawSelect();  // display button to select this tool
     
-//    float angle;  // rotation angle required to draw segments and dividing lines
-//    strokeWeight(max(1,int(((height+width)/200-denominator*(height+width)/6000)/2)));  // roughly scale line thickness with number of segments
-//    stroke(0);
-//    // transfer to class variables to make visible to other class methods
-//    xpos = xCentre;
-//    ypos = yCentre;
-//    angle=startAngle;
-//    fill(shadedFill);  // start with filled segments
-//    
-//    if (denominator==1){
-//      if (numerator==0) fill(backGround);
-//      ellipse(xpos, ypos, diameter, diameter);
-//    }
-//    else{
-//      for(int i=0; i<denominator; i++){
-//        if (angle>(2*PI)) angle=angle-(2*PI);  //reset angle once over 2*PI
-//        if(i==numerator) fill(backGround);  //switch to "empty" segments
-//     
-//        arc(xpos, ypos, diameter, diameter, angle, angle+(2*PI/denominator), PIE);
-//        angle=angle+(2*PI)/denominator;
-//      }
-//    }
 //  // show rotate instruction if not rotated yet
 //    if (!clickedOnce){
 //      pushMatrix();
@@ -58,26 +36,33 @@ class AxisAngle{
   }
   
   void clicked(int mx, int my) {
+    int radius=min(height/4,width/6);
     if (selectedPressed(mx, my)){
       if (!selected){
           selected = true;
           clickedOnce=true;
-    //      dragOffset = findAngle(mx-xPos, my-yPos)-startAngle;
-    //      if (dragOffset<0) dragOffset=dragOffset+(2*PI);
       }
       else{
         selected=false;
       }
     }
-    else{  // if selected, check for rotation
+    else if (turningPressed(mx, my)) {  // if selected, check for rotation
+      dragging=true;
+      oldAngle=bPrime;
+      dragOffset = findAngle(mx-(xPos-radius), my-(yPos+radius))-bPrime;
+      if (dragOffset<0) dragOffset=dragOffset+(2*PI);
+      if (dragOffset>(2*PI)) dragOffset=dragOffset-(2*PI);
     }
   }
-//  
-//  void drag() {
-//    startAngle = findAngle(mouseX-xpos, mouseY-ypos) - dragOffset;
-//    if (startAngle>(2*PI)) startAngle=startAngle-(2*PI);
-//    if (startAngle<0) startAngle=startAngle+(2*PI);
-//  }
+  
+  void drag() {
+    if (dragging){
+      int radius=min(height/4,width/6);
+      bPrime = findAngle(mouseX-(xPos-radius), mouseY-(yPos+radius)) - dragOffset;
+      if (bPrime>(2*PI)) bPrime=bPrime-(2*PI);
+      if (bPrime<0) bPrime=bPrime+(2*PI);
+    }
+  }
   
   // inverse tangent function with correction for angles outside the first quadrant.
   float findAngle(int x, int y){
@@ -101,7 +86,32 @@ class AxisAngle{
       ellipseMode(RADIUS);
       ellipse(0,0,2*radius/3,2*radius/3);
       stroke(255,0,0);
-      ellipse(0,-radius, min(1,lineWeight/3),min(1,lineWeight/3));
+      ellipse(0,-radius, max(1,lineWeight/3),min(1,lineWeight/3));
+    popMatrix();
+  }
+  
+  void drawRotator(){  // display the device to select new angle
+    int radius=min(height/4,width/6);
+    strokeWeight(lineWeight);
+    stroke(0);
+    fill(255,255,255,0);
+    pushMatrix();
+      translate(xPos-radius, yPos+radius);
+      rotate(bPrime);
+      drawArrow(-radius, 0, 2.0*radius,3*PI/2, lineWeight);
+      drawArrow(0, radius, 2.0*radius,PI, lineWeight);
+      ellipseMode(RADIUS);
+      ellipse(0,0,2*radius/3,2*radius/3);
+      //draw red tip to identify the y' axis
+      fill(255,0,0);
+      strokeWeight(0);
+      ellipse(0,-radius, max(1,lineWeight),max(1,lineWeight));
+      //draw OK and cancel buttons
+      rotate(-bPrime);
+      fill(0,255,0);
+      ellipse(-radius/2,3*radius/2, radius/4, radius/4);
+      fill(255,0,0);
+      ellipse(radius/2,3*radius/2, radius/4, radius/4);
     popMatrix();
   }
   
@@ -116,4 +126,27 @@ class AxisAngle{
     else return false;
   }
   
+  boolean turningPressed(int x, int y){
+    int dispRadius=min(height/4,width/6);
+    xPos=int(width*0.98);
+    yPos=int(height*0.02);
+    float r = pow(pow(x-(xPos-dispRadius),2)+pow(y-(yPos+dispRadius),2),0.5);  //click radius
+    if (r < dispRadius) {
+      
+      return true;
+    }
+    else return false;
+  }
+  
+  void drawArrow(int x1, int y1, float arrowLength, float angle, int weight){
+    angle=angle+PI/2;  // convert to due east starting point (as per Processing convention)
+    strokeWeight(weight);
+    pushMatrix();
+      translate(x1, y1);
+      rotate(angle);
+      line(0,0,arrowLength, 0);
+      line(arrowLength, 0, arrowLength - min(10, arrowLength/3), -min(10, arrowLength/3));
+      line(arrowLength, 0, arrowLength - min(10, arrowLength/3), min(10,arrowLength/3));
+    popMatrix();
+  }
 }

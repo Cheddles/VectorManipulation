@@ -28,7 +28,7 @@ class Vector{
     stroke(colour);
     pushMatrix();
     translate(width, height);
-      if (selected){
+      if (selected || (axes.dragging)){
         if (showComponents){
           //strokeWeight(max(1, lineWeight/2));
           pushMatrix();
@@ -51,9 +51,9 @@ class Vector{
             }
           popMatrix();
         }
-        textSize(20);
-        fill(0);
-        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
+//        textSize(20);
+//        fill(0);
+//        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
         stroke (255,0,0);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);

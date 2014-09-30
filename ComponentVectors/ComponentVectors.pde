@@ -62,12 +62,14 @@ void draw(){
   textAlign(LEFT, TOP);
   text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
+  axes.drag();
   axes.display();
 }
 
 void mousePressed(){
   axes.clicked(mouseX,mouseY);
-  if(axes.selectedPressed(mouseX, mouseY)){  // check all existing vectors for dragging/selection
+  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // check all existing vectors for dragging/selection
+    
   }
   else{  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
@@ -80,6 +82,7 @@ void mousePressed(){
 }
 
 void mouseReleased(){
+  axes.dragging=false;
   for (int i=0; i<vectorCollection.size(); i++){
     currentVector= (Vector) vectorCollection.get(i);
     currentVector.dragging=false;
