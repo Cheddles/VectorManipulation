@@ -10,7 +10,8 @@ boolean showComponents=true;  // show component vectors for selected vector
 boolean showBearing=false;  // show bearing for selected vector
 ArrayList vectorCollection;
 //int currentVector;  // current vector number within vectorCollection
-Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)         
+Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
+AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
 
 void setup(){
  size(horizontalSize,verticalSize);
@@ -21,11 +22,11 @@ void setup(){
 //  verticalComponent = new Arrow (255, 0, 0, lineWeight);
 //  horizontalComponent = new Arrow (0, 0, 255, lineWeight);
 vectorCollection = new ArrayList();
+axes = new AxisAngle();
 //currentVector = new Vector();
 }
 
 void draw(){
-  translate(width/2, height/2);
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
   
@@ -49,16 +50,21 @@ void draw(){
     textSize(height/10);
     fill(0);
     textAlign(CENTER, CENTER);
-    text("Click anywhere and drag", 0, -height/4);
-    text("to display displacement", 0, 0);
-    text("vectors from centre", 0, height/4);
+    pushMatrix();
+      translate(width/2, height/2);
+      text("Click anywhere and drag", 0, -height/4);
+      text("to display displacement", 0, 0);
+      text("vectors from centre", 0, height/4);
+    popMatrix();
   }
   
   // assign attribution and provide link for feedback
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", -width/2+height/50,-height/2+height/80);
+  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  
+  axes.display();
 }
 
 void mousePressed(){

@@ -26,32 +26,35 @@ class Vector{
     int[] location = new int[2];
     location=vectorToScreen(xLoc, yLoc);
     stroke(colour);
-    if (selected){
-      if (showComponents){
-        //strokeWeight(max(1, lineWeight/2));
-        pushMatrix();
-          translate(location[0], location[1]);
-          rotate(upAngle);
-          stroke(0,0,255);
-          // draw x' component vector
-          if (sin(bearing-upAngle)<0){
-            drawArrow(0,0,-value*scale*sin(bearing-upAngle), 3*PI/2, max(1, lineWeight/2));
-          }
-          else{
-            drawArrow(0,0,value*scale*sin(bearing-upAngle), PI/2, max(1, lineWeight/2));
-          }
-          // draw y' component vector
-          if (cos(bearing-upAngle)>0){
-            drawArrow(int(-value*scale*sin(bearing-upAngle)),0,value*scale*cos(bearing-upAngle), 0, max(1, lineWeight/2));
-          }
-          else{
-            drawArrow(int(-value*scale*sin(bearing-upAngle)),0,-value*scale*cos(bearing-upAngle), PI, max(1, lineWeight/2));
-          }
-        popMatrix();
+    pushMatrix();
+    translate(width/2, height/2);
+      if (selected){
+        if (showComponents){
+          //strokeWeight(max(1, lineWeight/2));
+          pushMatrix();
+            translate(location[0], location[1]);
+            rotate(upAngle);
+            stroke(0,0,255);
+            // draw x' component vector
+            if (sin(bearing-upAngle)<0){
+              drawArrow(0,0,-value*scale*sin(bearing-upAngle), 3*PI/2, max(1, lineWeight/2));
+            }
+            else{
+              drawArrow(0,0,value*scale*sin(bearing-upAngle), PI/2, max(1, lineWeight/2));
+            }
+            // draw y' component vector
+            if (cos(bearing-upAngle)>0){
+              drawArrow(int(-value*scale*sin(bearing-upAngle)),0,value*scale*cos(bearing-upAngle), 0, max(1, lineWeight/2));
+            }
+            else{
+              drawArrow(int(-value*scale*sin(bearing-upAngle)),0,-value*scale*cos(bearing-upAngle), PI, max(1, lineWeight/2));
+            }
+          popMatrix();
+        }
+        stroke (255,0,0);
       }
-      stroke (255,0,0);
-    }
-    drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+      drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+    popMatrix();
   }
   
   void create (int x, int y){  // create a new vector by clicking and dragging
