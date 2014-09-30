@@ -1,7 +1,7 @@
 class AxisAngle{
   int xPos;  // x-coordinate of top right corner
   int yPos;  // y-coordinate of top right corner
-  float bPrime;  // offset angle (clockwise from straight up)
+  float bPrime=PI/6;  // offset angle (clockwise from straight up)
   float oldAngle;  // previous bPrime (to be used if angle change is cancelled
   boolean selected=false;  // shows and adjustable only when selected
   boolean dragging=false;
@@ -15,10 +15,11 @@ class AxisAngle{
     xPos=int(width*0.98);
     yPos=int(height*0.02);
     if (selected){  // mute vectors and display angle adjustment tool (with done and cancel buttons)
+          
     }
-    else{  // display button to select this tool
-      drawSelect();
-    }
+    
+    drawSelect();  // display button to select this tool
+    
 //    float angle;  // rotation angle required to draw segments and dividing lines
 //    strokeWeight(max(1,int(((height+width)/200-denominator*(height+width)/6000)/2)));  // roughly scale line thickness with number of segments
 //    stroke(0);
@@ -86,11 +87,13 @@ class AxisAngle{
     fill(255,255,255,0);
     pushMatrix();
       translate(xPos-radius, yPos+radius);
-      rotate(upAngle);
+      rotate(bPrime);
       line(-radius,0, radius, 0);
       line(0,-radius,0,radius);
       ellipseMode(RADIUS);
       ellipse(0,0,2*radius/3,2*radius/3);
+      stroke(255,0,0);
+      ellipse(0,-radius, min(1,lineWeight/3),min(1,lineWeight/3));
     popMatrix();
   }
 }

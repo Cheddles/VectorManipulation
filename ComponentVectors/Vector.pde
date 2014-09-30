@@ -17,7 +17,7 @@ class Vector{
   Vector(int x, int y){
     // Transfer to class-wide variables
     float[] tempArray = new float[2];
-    tempArray=screenToVector(x, y);
+    tempArray=screenToVector(x-width/2, y-height/2);
     xLoc=tempArray[0];
     yLoc=tempArray[1];
   } 
@@ -27,41 +27,46 @@ class Vector{
     location=vectorToScreen(xLoc, yLoc);
     stroke(colour);
     pushMatrix();
-    translate(width/2, height/2);
+    translate(width, height);
       if (selected){
         if (showComponents){
           //strokeWeight(max(1, lineWeight/2));
           pushMatrix();
             translate(location[0], location[1]);
-            rotate(upAngle);
+            rotate(axes.bPrime);
             stroke(0,0,255);
             // draw x' component vector
-            if (sin(bearing-upAngle)<0){
-              drawArrow(0,0,-value*scale*sin(bearing-upAngle), 3*PI/2, max(1, lineWeight/2));
+            if (sin(bearing-axes.bPrime)<0){
+              drawArrow(0,0,-value*scale*sin(bearing-axes.bPrime), 3*PI/2, max(1, lineWeight/2));
             }
             else{
-              drawArrow(0,0,value*scale*sin(bearing-upAngle), PI/2, max(1, lineWeight/2));
+              drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
             }
             // draw y' component vector
-            if (cos(bearing-upAngle)>0){
-              drawArrow(int(-value*scale*sin(bearing-upAngle)),0,value*scale*cos(bearing-upAngle), 0, max(1, lineWeight/2));
+            if (cos(bearing-axes.bPrime)>0){
+              drawArrow(int(-value*scale*sin(bearing-axes.bPrime)),0,value*scale*cos(bearing-axes.bPrime), 0, max(1, lineWeight/2));
             }
             else{
-              drawArrow(int(-value*scale*sin(bearing-upAngle)),0,-value*scale*cos(bearing-upAngle), PI, max(1, lineWeight/2));
+              drawArrow(int(-value*scale*sin(bearing-axes.bPrime)),0,-value*scale*cos(bearing-axes.bPrime), PI, max(1, lineWeight/2));
             }
           popMatrix();
         }
+        textSize(20);
+        fill(0);
+        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
         stroke (255,0,0);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+
     popMatrix();
+   // text(str(xLoc)+", "+str(yLoc),50,50);
   }
   
   void create (int x, int y){  // create a new vector by clicking and dragging
-    float xComp;  // local variiables
+    float xComp;  // local variables
     float yComp;  // components parallel to x and y axes for the screen only.
     float tempPoint[] = new float[2];
-    tempPoint = screenToVector(x,y);
+    tempPoint = screenToVector(x-width/2,y-height/2);
     xComp=tempPoint[0]-xLoc;
     yComp=tempPoint[1]-yLoc;
     value=pow(pow(xComp,2)+pow(yComp,2),0.5);

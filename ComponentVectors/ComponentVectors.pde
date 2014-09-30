@@ -1,6 +1,5 @@
 Float scale=100.0;  // pixels of screen distance per unit of vector value (initially set to 100)
 String units=" m"; // units for the vector (with a leading space)
-float upAngle=PI/6;  // angle of the vertical (y) axis for component vector purposes.
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
