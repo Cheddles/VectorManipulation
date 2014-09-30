@@ -46,7 +46,7 @@ class AxisAngle{
         selected=false;
       }
     }
-    else if (turningPressed(mx, my)) {  // if selected, check for rotation
+    else if (selected&&(turningPressed(mx, my))) {  // if selected, check for rotation
       dragging=true;
       oldAngle=bPrime;
       dragOffset = findAngle(mx-(xPos-radius), my-(yPos+radius))-bPrime;
@@ -59,6 +59,7 @@ class AxisAngle{
     if (dragging){
       int radius=min(height/4,width/6);
       bPrime = findAngle(mouseX-(xPos-radius), mouseY-(yPos+radius)) - dragOffset;
+      bPrime = radians(float(int(degrees(bPrime))));
       if (bPrime>(2*PI)) bPrime=bPrime-(2*PI);
       if (bPrime<0) bPrime=bPrime+(2*PI);
     }
@@ -105,13 +106,17 @@ class AxisAngle{
       //draw red tip to identify the y' axis
       fill(255,0,0);
       strokeWeight(0);
-      ellipse(0,-radius, max(1,lineWeight),max(1,lineWeight));
+      ellipse(0,-radius, lineWeight, lineWeight);
       //draw OK and cancel buttons
       rotate(-bPrime);
-      fill(0,255,0);
-      ellipse(-radius/2,3*radius/2, radius/4, radius/4);
-      fill(255,0,0);
-      ellipse(radius/2,3*radius/2, radius/4, radius/4);
+      textAlign(CENTER, CENTER);
+      textSize(height/12);
+      fill(0);
+      text(int(degrees(bPrime)+0.001)+"°T",0,4*radius/3);
+//      fill(0,255,0);
+//      ellipse(-radius/2,2*radius, radius/4, radius/4);
+//      fill(255,0,0);
+//      ellipse(radius/2,2*radius, radius/4, radius/4);
     popMatrix();
   }
   
