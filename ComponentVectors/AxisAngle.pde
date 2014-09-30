@@ -15,7 +15,9 @@ class AxisAngle{
     xPos=int(width*0.98);
     yPos=int(height*0.02);
     if (selected){  // mute vectors and display angle adjustment tool (with done and cancel buttons)
-          
+      fill(255,255,255,150);
+      strokeWeight(0);
+      rect(0,0,width,height);
     }
     
     drawSelect();  // display button to select this tool
@@ -55,15 +57,21 @@ class AxisAngle{
 //    }
   }
   
-//  void clicked(int mx, int my) {
-//    float r = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
-//    if (((2*r) < diameter)&&(r>10)) {
-//      dragging = true;
-//      clickedOnce=true;
-//      dragOffset = findAngle(mx-xPos, my-yPos)-startAngle;
-//      if (dragOffset<0) dragOffset=dragOffset+(2*PI);
-//    }
-//  }
+  void clicked(int mx, int my) {
+    if (selectedPressed(mx, my)){
+      if (!selected){
+          selected = true;
+          clickedOnce=true;
+    //      dragOffset = findAngle(mx-xPos, my-yPos)-startAngle;
+    //      if (dragOffset<0) dragOffset=dragOffset+(2*PI);
+      }
+      else{
+        selected=false;
+      }
+    }
+    else{  // if selected, check for rotation
+    }
+  }
 //  
 //  void drag() {
 //    startAngle = findAngle(mouseX-xpos, mouseY-ypos) - dragOffset;
@@ -96,4 +104,16 @@ class AxisAngle{
       ellipse(0,-radius, min(1,lineWeight/3),min(1,lineWeight/3));
     popMatrix();
   }
+  
+  boolean selectedPressed(int x, int y){
+    int dispRadius=max(height/40,15);
+    xPos=int(width*0.98);
+    yPos=int(height*0.02);
+    float r = pow(pow(x-(xPos-dispRadius),2)+pow(y-(yPos+dispRadius),2),0.5);  //click radius
+    if (r < dispRadius) {
+      return true;
+    }
+    else return false;
+  }
+  
 }

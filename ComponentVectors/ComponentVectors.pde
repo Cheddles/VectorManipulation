@@ -45,7 +45,6 @@ void draw(){
   }
 
   else{
-    //currentVector=
     textSize(height/10);
     fill(0);
     textAlign(CENTER, CENTER);
@@ -67,7 +66,8 @@ void draw(){
 }
 
 void mousePressed(){
-  if(false){  // check all existing vectors for dragging/selection
+  axes.clicked(mouseX,mouseY);
+  if(axes.selectedPressed(mouseX, mouseY)){  // check all existing vectors for dragging/selection
   }
   else{  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
