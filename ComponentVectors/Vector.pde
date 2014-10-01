@@ -53,9 +53,9 @@ class Vector{
             }
           popMatrix();
         }
-        textSize(20);
-        fill(0);
-        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
+//        textSize(20);
+//        fill(0);
+//        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
         stroke (activeColor);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);

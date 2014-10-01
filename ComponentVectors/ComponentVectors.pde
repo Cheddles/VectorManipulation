@@ -65,11 +65,12 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  text(testDebug, height/50, height/80);
-  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  //text(testDebug, height/50, height/80);
+  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
   axes.drag();
-  axes.display(); 
+  axes.display();
+//  rect(0,0,width/10,height/15);
 }
 
 void mousePressed(){
@@ -94,9 +95,6 @@ void mousePressed(){
       }
     }
   }
-//  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // only look at vectors if the rotation tool is not being used
-//    
-//  }
   if ((!foundSomething)&&(!axes.selected)){  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
