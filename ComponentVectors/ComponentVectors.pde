@@ -34,14 +34,13 @@ axes = new AxisAngle();
 void draw(){
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
-  rect(100,100,100,100);
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
     if(currentVector.forming) {
-      //currentVector.colour = color(255,0,0);
       currentVector.create(mouseX, mouseY);
     }
+    else if (currentVector.dragging) currentVector.move(mouseX, mouseY);
     vectorCollection.set(vectorCollection.size()-1, currentVector);
     //currentVector.display();
     for (int i=0; i<vectorCollection.size(); i++){

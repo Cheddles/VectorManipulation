@@ -4,8 +4,8 @@ class Vector{
   float yLoc;  // y-coordinate of base (as number of vector units from screen centre)
   float value;  // value in vector units (not screen dimensions)
   String label;
-  float stringOffsetX;  // offset from x1 (in vector units)
-  float stringOffsetY;  // offset from y1 (in vector units)
+  float dragOffsetX;  // offset from x1 (in vector units)
+  float dragOffsetY;  // offset from y1 (in vector units)
   boolean dragging=false;  // true if being dragged to relocate
   boolean selected=true;  // if currently the selected vector (true when first created)
   boolean forming=true;  // if still being created (true when first created)
@@ -76,7 +76,10 @@ class Vector{
   }
   
   void move (int x, int y){  // move a vector by dragging
-    
+    float[] mouseLoc = new float[2];
+    mouseLoc = screenToVector(x,y);
+    xLoc = mouseLoc[0]-dragOffsetX;
+    yLoc = mouseLoc[1]-dragOffsetY;
   }
   
   boolean click (int x, int y){  // determine if the vector has been clicked on to select/drag (middle 1/3 only)
@@ -93,7 +96,8 @@ class Vector{
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
       
       if (d*scale<(4*lineWeight)){
-        
+        dragOffsetX=clickLoc[0]-xLoc;
+        dragOffsetY=clickLoc[1]-yLoc;
         dragging=true;
         selected=true;
         return true;
