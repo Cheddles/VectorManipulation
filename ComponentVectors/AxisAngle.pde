@@ -35,9 +35,11 @@ class AxisAngle{
 //    }
   }
   
-  void clicked(int mx, int my) {
+  boolean clicked(int mx, int my) {
+    boolean returnValue;
     int radius=min(height/4,width/6);
     if (selectedPressed(mx, my)){
+      returnValue = true;
       if (!selected){
           selected = true;
           clickedOnce=true;
@@ -47,12 +49,16 @@ class AxisAngle{
       }
     }
     else if (selected&&(turningPressed(mx, my))) {  // if selected, check for rotation
+      returnValue = true;
       dragging=true;
       oldAngle=bPrime;
       dragOffset = findAngle(mx-(xPos-radius), my-(yPos+radius))-bPrime;
       if (dragOffset<0) dragOffset=dragOffset+(2*PI);
       if (dragOffset>(2*PI)) dragOffset=dragOffset-(2*PI);
     }
+    else returnValue = false;
+    
+    return returnValue;
   }
   
   void drag() {

@@ -16,6 +16,8 @@ color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
 
+String testDebug="testing";
+
 void setup(){
  size(horizontalSize,verticalSize);
  if (frame != null) {
@@ -32,7 +34,7 @@ axes = new AxisAngle();
 void draw(){
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
-  
+  rect(100,100,100,100);
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
@@ -64,18 +66,27 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  text(testDebug, height/50, height/80);
+  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
   axes.drag();
-  axes.display();
+  axes.display(); 
 }
 
 void mousePressed(){
-  axes.clicked(mouseX,mouseY);
-  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // check all existing vectors for dragging/selection
-    
+  boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
+  foundSomething = axes.clicked(mouseX,mouseY);
+  if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
+    for (int i=0; i<vectorCollection.size(); i++){
+      currentVector= (Vector) vectorCollection.get(i);
+      foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
+      vectorCollection.set(i, currentVector);
+    }
   }
-  else{  // start new vector
+//  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // only look at vectors if the rotation tool is not being used
+//    
+//  }
+  if (!foundSomething){  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
