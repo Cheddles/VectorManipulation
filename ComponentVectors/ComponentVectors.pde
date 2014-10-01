@@ -79,7 +79,15 @@ void mousePressed(){
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
       foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
-      vectorCollection.set(i, currentVector);
+      if (foundSomething){  //reshuffle vectors to put selected vector at end of arraylist
+        Vector currentVector2 = new Vector(0,0);
+        for (int j=i+1; j<vectorCollection.size(); j++){
+          currentVector2 = (Vector) vectorCollection.get(j);
+          vectorCollection.set(j-1, currentVector2);
+        }
+        vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
+      }
+      else vectorCollection.set(i, currentVector);
     }
   }
 //  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // only look at vectors if the rotation tool is not being used

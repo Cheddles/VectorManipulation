@@ -77,6 +77,7 @@ class Vector{
   
   void move (int x, int y){  // move a vector by dragging
     float[] mouseLoc = new float[2];
+    testDebug=str(mouseLoc[0]);
     mouseLoc = screenToVector(x,y);
     xLoc = mouseLoc[0]-dragOffsetX;
     yLoc = mouseLoc[1]-dragOffsetY;
