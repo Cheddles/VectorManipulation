@@ -16,7 +16,7 @@ color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
 
-String testDebug="testing";
+String testDebug="deBug deFault";
 
 void setup(){
  size(horizontalSize,verticalSize);
