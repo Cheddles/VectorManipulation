@@ -82,12 +82,15 @@ class AxisAngle{
     pushMatrix();
       translate(xPos-radius, yPos+radius);
       rotate(bPrime);
+      stroke(xColor);
       line(-radius,0, radius, 0);
+      ellipse(radius,0, max(1,lineWeight/3),min(1,lineWeight/3));
+      stroke(yColor);
       line(0,-radius,0,radius);
+      ellipse(0,-radius, max(1,lineWeight/3),min(1,lineWeight/3));
+      stroke(0);
       ellipseMode(RADIUS);
       ellipse(0,0,2*radius/3,2*radius/3);
-      stroke(255,0,0);
-      ellipse(0,-radius, max(1,lineWeight/3),min(1,lineWeight/3));
     popMatrix();
   }
   
@@ -99,14 +102,17 @@ class AxisAngle{
     pushMatrix();
       translate(xPos-radius, yPos+radius);
       rotate(bPrime);
+      stroke(xColor);
       drawArrow(-radius, 0, 2.0*radius,3*PI/2, lineWeight);
+      stroke(yColor);
       drawArrow(0, radius, 2.0*radius,PI, lineWeight);
+      stroke(0);
       ellipseMode(RADIUS);
       ellipse(0,0,2*radius/3,2*radius/3);
-      //draw red tip to identify the y' axis
-      fill(255,0,0);
-      strokeWeight(0);
-      ellipse(0,-radius, lineWeight, lineWeight);
+//      //draw red tip to identify the y' axis
+//      fill(255,0,0);
+//      strokeWeight(0);
+//      ellipse(0,-radius, lineWeight, lineWeight);
       //draw OK and cancel buttons
       rotate(-bPrime);
       textAlign(CENTER, CENTER);
@@ -136,8 +142,7 @@ class AxisAngle{
     xPos=int(width*0.98);
     yPos=int(height*0.02);
     float r = pow(pow(x-(xPos-dispRadius),2)+pow(y-(yPos+dispRadius),2),0.5);  //click radius
-    if (r < dispRadius) {
-      
+    if (r < int(1.1*dispRadius)) {
       return true;
     }
     else return false;

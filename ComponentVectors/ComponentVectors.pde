@@ -11,6 +11,10 @@ ArrayList vectorCollection;
 //int currentVector;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
+color yColor = color(0,0,255);  // colour of y and y' component vectors
+color xColor = color(0,180,0);  // colour of x and x' component vectors
+color activeColor = color(255,0,0);  // colour of currently-selected vector
+color baseColor = color(0);  // default colour of non-selected vector
 
 void setup(){
  size(horizontalSize,verticalSize);
@@ -50,9 +54,9 @@ void draw(){
     textAlign(CENTER, CENTER);
     pushMatrix();
       translate(width/2, height/2);
-      text("Click anywhere and drag", 0, -height/4);
-      text("to display displacement", 0, 0);
-      text("vectors from centre", 0, height/4);
+      text("Click anywhere to locate", 0, -height/4);
+      text("a vector then drag to give", 0, 0);
+      text("it length and direction", 0, height/4);
     popMatrix();
   }
   

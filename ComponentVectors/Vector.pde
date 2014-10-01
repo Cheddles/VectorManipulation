@@ -20,6 +20,7 @@ class Vector{
     tempArray=screenToVector(x-width/2, y-height/2);
     xLoc=tempArray[0];
     yLoc=tempArray[1];
+    colour=baseColor;  //default to base colour
   } 
   
   void display(){
@@ -34,7 +35,7 @@ class Vector{
           pushMatrix();
             translate(location[0], location[1]);
             rotate(axes.bPrime);
-            stroke(0,0,255);
+            stroke(xColor);
             // draw x' component vector
             if (sin(bearing-axes.bPrime)<0){
               drawArrow(0,0,-value*scale*sin(bearing-axes.bPrime), 3*PI/2, max(1, lineWeight/2));
@@ -43,6 +44,7 @@ class Vector{
               drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
             }
             // draw y' component vector
+            stroke(yColor);
             if (cos(bearing-axes.bPrime)>0){
               drawArrow(int(-value*scale*sin(bearing-axes.bPrime)),0,value*scale*cos(bearing-axes.bPrime), 0, max(1, lineWeight/2));
             }
@@ -54,7 +56,7 @@ class Vector{
 //        textSize(20);
 //        fill(0);
 //        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
-        stroke (255,0,0);
+        stroke (activeColour);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
 
