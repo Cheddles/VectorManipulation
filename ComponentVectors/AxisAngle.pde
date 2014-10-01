@@ -15,7 +15,7 @@ class AxisAngle{
     xPos=int(width*0.98);
     yPos=int(height*0.02);
     if (selected){  // mute vectors and display angle adjustment tool (with done and cancel buttons)
-      fill(255,255,255,150);
+      fill(255,255,255,180);
       strokeWeight(0);
       rect(0,0,width,height);
       drawRotator();
@@ -96,19 +96,22 @@ class AxisAngle{
   
   void drawRotator(){  // display the device to select new angle
     int radius=min(height/4,width/6);
-    strokeWeight(lineWeight);
     stroke(0);
     fill(255,255,255,0);
     pushMatrix();
       translate(xPos-radius, yPos+radius);
+      stroke(128);
+      strokeWeight(max(1,lineWeight/3));
+      if(bPrime!=0) line(0,0,0,-radius);
       rotate(bPrime);
       stroke(xColor);
+      strokeWeight(lineWeight);
       drawArrow(-radius, 0, 2.0*radius,3*PI/2, lineWeight);
       stroke(yColor);
       drawArrow(0, radius, 2.0*radius,PI, lineWeight);
       stroke(0);
-      ellipseMode(RADIUS);
-      ellipse(0,0,2*radius/3,2*radius/3);
+//      ellipseMode(RADIUS);
+//      ellipse(0,0,2*radius/3,2*radius/3);
 //      //draw red tip to identify the y' axis
 //      fill(255,0,0);
 //      strokeWeight(0);
@@ -124,6 +127,8 @@ class AxisAngle{
 //      fill(255,0,0);
 //      ellipse(radius/2,2*radius, radius/4, radius/4);
     popMatrix();
+    stroke(0);
+    roundArrow(xPos-radius, yPos+radius, 2*radius/3, 0, bPrime);
   }
   
   boolean selectedPressed(int x, int y){
@@ -157,6 +162,21 @@ class AxisAngle{
       line(0,0,arrowLength, 0);
       line(arrowLength, 0, arrowLength - min(10, arrowLength/3), -min(10, arrowLength/3));
       line(arrowLength, 0, arrowLength - min(10, arrowLength/3), min(10,arrowLength/3));
+    popMatrix();
+  }
+  
+  void roundArrow(int xCentre, int yCentre, int radius, float startBearing, float arcAngle){
+    //draw arc
+    noFill();
+    strokeWeight(max(1,lineWeight/3));
+    pushMatrix();
+      translate(xCentre, yCentre);
+      rotate(1.5*PI-startBearing);
+      arc(0,0, radius, radius, 0, arcAngle);
+      rotate(arcAngle);
+      //ellipse(radius,0,10,10);
+      line(radius,0,radius*(1+min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
+      line(radius,0,radius*(1-min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
     popMatrix();
   }
 }

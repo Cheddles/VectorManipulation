@@ -56,7 +56,7 @@ class Vector{
 //        textSize(20);
 //        fill(0);
 //        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
-        stroke (activeColour);
+        stroke (activeColor);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
 
