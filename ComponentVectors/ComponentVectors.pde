@@ -83,17 +83,21 @@ void mousePressed(){
         Vector currentVector2 = new Vector(0,0);
         for (int j=i+1; j<vectorCollection.size(); j++){
           currentVector2 = (Vector) vectorCollection.get(j);
+          currentVector2.selected=false;
           vectorCollection.set(j-1, currentVector2);
         }
         vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
       }
-      else vectorCollection.set(i, currentVector);
+      else {
+        currentVector.selected=false;
+        vectorCollection.set(i, currentVector);
+      }
     }
   }
 //  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // only look at vectors if the rotation tool is not being used
 //    
 //  }
-  if (!foundSomething){  // start new vector
+  if ((!foundSomething)&&(!axes.selected)){  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
