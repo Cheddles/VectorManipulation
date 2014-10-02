@@ -26,40 +26,72 @@ class Vector{
   void display(){
     int[] location = new int[2];
     location=vectorToScreen(xLoc, yLoc);
+    if ((selected)&&(bShowBearing.selected)){  // draw bearing arrow and show value
+      strokeWeight(max(1, lineWeight/3));
+      stroke(128);
+      line(location[0], location[1], location[0], location[1]-int(2*value*scale/3));
+      roundArrow(location[0], location[1], int(value*scale/3), 0.0, bearing);
+      pushMatrix();
+        translate(location[0], location[1]-int(value*scale/3));
+        rotate(-PI/2);
+        fill(0);
+        textSize(height/30);
+        textAlign(CENTER, BOTTOM);
+        text(str(int(degrees(bearing)+0.001))+"°",0,0);
+      popMatrix();
+    }
     stroke(colour);
-    pushMatrix();
-      if (selected || (axes.dragging)){
-        if ((bShowComp.selected)||(axes.dragging)){
-          //strokeWeight(max(1, lineWeight/2));
+    if (selected || (axes.dragging)){
+      if ((bShowComp.selected)||(axes.dragging)){  //draw component vectors and show values
+        //strokeWeight(max(1, lineWeight/2));
+        pushMatrix();
+          translate(location[0], location[1]);
+          rotate(axes.bPrime);
+          stroke(xColor);
+          // draw x' component vector
+          if (sin(bearing-axes.bPrime)<0){
+            drawArrow(0,0,-value*scale*sin(bearing-axes.bPrime), 3*PI/2, max(1, lineWeight/2));
+          }
+          else{
+            drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
+          }
+          textAlign(CENTER, TOP);
+          textSize(height/30);
+          fill(xColor);
+          text(String.format("%.2f", abs((value*sin(bearing-axes.bPrime))))+units,int(0.5*value*scale*sin(bearing-axes.bPrime)),height/80);
+          // draw y' component vector
+          stroke(yColor);
+          if (cos(bearing-axes.bPrime)>0){
+            drawArrow(int(value*scale*sin(bearing-axes.bPrime)),0,value*scale*cos(bearing-axes.bPrime), 0, max(1, lineWeight/2));
+          }
+          else{
+            drawArrow(int(value*scale*sin(bearing-axes.bPrime)),0,-value*scale*cos(bearing-axes.bPrime), PI, max(1, lineWeight/2));
+          }
           pushMatrix();
-            translate(location[0], location[1]);
-            rotate(axes.bPrime);
-            stroke(xColor);
-            // draw x' component vector
-            if (sin(bearing-axes.bPrime)<0){
-              drawArrow(0,0,-value*scale*sin(bearing-axes.bPrime), 3*PI/2, max(1, lineWeight/2));
+          fill(yColor);
+            if(bearing<=PI){
+              rotate(-PI/2);
+              text(String.format("%.2f", abs((value*cos(bearing-axes.bPrime))))+units,
+                  int(0.5*value*scale*cos(bearing-axes.bPrime)),int(value*scale*sin(bearing-axes.bPrime))+width/100);
             }
             else{
-              drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
-            }
-            // draw y' component vector
-            stroke(yColor);
-            if (cos(bearing-axes.bPrime)>0){
-              drawArrow(int(value*scale*sin(bearing-axes.bPrime)),0,value*scale*cos(bearing-axes.bPrime), 0, max(1, lineWeight/2));
-            }
-            else{
-              drawArrow(int(value*scale*sin(bearing-axes.bPrime)),0,-value*scale*cos(bearing-axes.bPrime), PI, max(1, lineWeight/2));
             }
           popMatrix();
-        }
-//        textSize(20);
-//        fill(0);
-//        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
-        stroke (activeColor);
+        popMatrix();
       }
-      drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+      
+      if (selected){  //show vector details on top of screen
+        textSize(height/20);
+        textAlign(LEFT, TOP);
+        fill(0);
+        text(String.format("%.2f", value)+units+" at bearing "+str(int(degrees(bearing)+0.001))+"°T", width/6, height/30);
+      }
+      stroke (activeColor);
+    }
+    
+    drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+    
 
-    popMatrix();
    // text(str(xLoc)+", "+str(yLoc),50,50);
   }
   
@@ -144,6 +176,21 @@ class Vector{
     screenOut[0] = int(xVect*scale)+width/2;
     screenOut[1] = int(-yVect*scale)+height/2;
     return screenOut;
+  }
+
+   void roundArrow(int xCentre, int yCentre, int radius, float startBearing, float arcAngle){
+    //draw arc
+    noFill();
+    strokeWeight(max(1,lineWeight/3));
+    pushMatrix();
+      translate(xCentre, yCentre);
+      rotate(1.5*PI-startBearing);
+      arc(0,0, radius, radius, 0, arcAngle);
+      rotate(arcAngle);
+      //ellipse(radius,0,10,10);
+      line(radius,0,radius*(1+min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
+      line(radius,0,radius*(1-min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
+    popMatrix();
   }
 
 }
