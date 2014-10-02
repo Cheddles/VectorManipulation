@@ -82,7 +82,6 @@ class Slider{
       
       //convert location to scale value
       scale = float(newloc-xmin)/float(xmax-xmin)*(max-min)+min;
-      testDebug=str(scale);
     }
   
 //  void hover(int mx, int my) {

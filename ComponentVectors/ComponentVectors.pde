@@ -20,8 +20,6 @@ color baseColor = color(0);  // default colour of non-selected vector
 Button bClear;  //clear all button
 Button bDelete;  //delete current selection button
 
-
-
 String testDebug="deBug deFault";
 
 void setup(){
@@ -98,6 +96,18 @@ void mousePressed(){
       horizontalSize=width;
       verticalSize=height;
       setup();
+    }
+    
+    if(bDelete.click(mouseX, mouseY)){  //check delete button
+      foundSomething=true;
+      for (int i=0; i<vectorCollection.size(); i++){
+        currentVector= (Vector) vectorCollection.get(i);
+        if (currentVector.selected){
+          vectorCollection.remove(i);
+          i=i-1;  //to account for renumbering a shorter array list
+        }
+      }
+      bDelete.selected=false;
     }
   }
   

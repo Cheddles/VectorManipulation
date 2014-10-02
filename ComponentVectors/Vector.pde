@@ -26,7 +26,6 @@ class Vector{
   void display(){
     int[] location = new int[2];
     location=vectorToScreen(xLoc, yLoc);
-    //testDebug=str(degrees(bearing));
     stroke(colour);
     pushMatrix();
       if (selected || (axes.dragging)){
@@ -93,9 +92,7 @@ class Vector{
       float m = 1/tan(bearing);  //slope of the vector
       float b = yLoc-(m*xLoc);  //y-intercept of vector
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
-      
-      testDebug=str(d);  //
-      
+            
       if (abs(d*scale)<(2*lineWeight)){
         dragOffsetX=clickLoc[0]-xLoc;
         dragOffsetY=clickLoc[1]-yLoc;
