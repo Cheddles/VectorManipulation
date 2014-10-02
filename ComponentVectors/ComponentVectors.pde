@@ -17,6 +17,8 @@ color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
 
+Button bClear;  //clear all button
+
 String testDebug="deBug deFault";
 
 void setup(){
@@ -28,12 +30,17 @@ void setup(){
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
 zoom = new Slider(10.0, 700.0, scale, 0.95);
+bClear = new Button(0.0, 0.0, 1/9.0, 1/9.0, "Clear");
 //currentVector = new Vector();
 }
 
 void draw(){
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
+
+  // display button controls
+  bClear.display();
+
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
@@ -72,7 +79,7 @@ void draw(){
   zoom.display();
   axes.drag();
   axes.display();
-  rect(0,0,width/10,height/9);
+  //rect(0,0,width/10,height/9);
 }
 
 void mousePressed(){

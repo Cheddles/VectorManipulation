@@ -16,7 +16,7 @@ class Button{
     yLoc=y;
     propWidth=wide;
     propHeight=high;
-    label=string;
+    label=text;
   }
   
   void display(){
@@ -26,7 +26,7 @@ class Button{
     if (selected) fill(fontActive);
     else fill(fontInactive);
     textAlign(CENTER,CENTER);
-    textSize(propHeight*height/2);
+    textSize(propHeight*height/3);
     text(label, xLoc*width+propWidth*width/2, yLoc*height+propHeight*height/2);
   }
   
