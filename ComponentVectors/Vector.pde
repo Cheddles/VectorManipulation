@@ -55,6 +55,10 @@ class Vector{
           else{
             drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
           }
+          textAlign(CENTER, TOP);
+          textSize(height/30);
+          fill(xColor);
+          text(String.format("%.2f", abs((value*sin(bearing-axes.bPrime))))+units,int(0.5*value*scale*sin(bearing-axes.bPrime)),height/80);
           // draw y' component vector
           stroke(yColor);
           if (cos(bearing-axes.bPrime)>0){
@@ -63,6 +67,16 @@ class Vector{
           else{
             drawArrow(int(value*scale*sin(bearing-axes.bPrime)),0,-value*scale*cos(bearing-axes.bPrime), PI, max(1, lineWeight/2));
           }
+          pushMatrix();
+          fill(yColor);
+            if(bearing<=PI){
+              rotate(-PI/2);
+              text(String.format("%.2f", abs((value*cos(bearing-axes.bPrime))))+units,
+                  int(0.5*value*scale*cos(bearing-axes.bPrime)),int(value*scale*sin(bearing-axes.bPrime))+width/100);
+            }
+            else{
+            }
+          popMatrix();
         popMatrix();
       }
       
