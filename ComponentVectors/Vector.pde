@@ -87,12 +87,9 @@ class Vector{
     clickLoc=screenToVector(x,y);
     float xComp=value*sin(bearing);  // x-component of vector
     float yComp=value*cos(bearing);  // y-component of vector
-    testDebug=str(xComp)+","+str(yComp);
     
     float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
-    
-    if ((r>value/3)&&(r<2*value/3)){
-    //if((clickLoc[0]>(xLoc+xComp/3))&&(clickLoc[0]<(xLoc+2*xComp/3))&&(clickLoc[1]>(yLoc+yComp/3))&&(clickLoc[1]<(yLoc+2*yComp/3))){  //check to make sure in a box around middle 1/3 of the vector
+    if ((r>value/3)&&(r<2*value/3)){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
       float m = 1/tan(bearing);  //slope of the vector
       float b = yLoc-(m*xLoc);  //y-intercept of vector
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
