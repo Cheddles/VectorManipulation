@@ -7,6 +7,8 @@ class AxisAngle{
   boolean dragging=false;
   boolean clickedOnce=false;  // if this control has been clicked once (to display control instructions)
   float dragOffset;  // the angle offset when the mouse is clicked to drag
+  String xLabel="x";
+  String yLabel="y";
   
   AxisAngle(){
   }

@@ -74,17 +74,21 @@ void draw(){
     pushMatrix();
       translate(width*5/9, height/2);
       text("Click anywhere to locate", 0, -height/4);
-      text("a vector then drag to give", 0, 0);
-      text("it length and direction", 0, height/4);
+      text("a vector then drag to give", 0, -height/16);
+      text("it length and direction", 0, height/8);
     popMatrix();
   }
   
   // assign attribution and provide link for feedback
-  fill(0);
-  textSize(height/40);
-  textAlign(LEFT, TOP);
-  text(testDebug, max(height/6, width/8), height/80);
-  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", max(height/6, width/8), height/80);
+  pushMatrix();
+    translate(int(width*0.99),int(height*0.98));
+    rotate(PI/2);
+    fill(0);
+    textSize(height/40);
+    textAlign(RIGHT, TOP);
+    //text(testDebug, 0, 0);
+    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+  popMatrix();
   
   if (zoom.dragging) zoom.drag();
   zoom.display();
