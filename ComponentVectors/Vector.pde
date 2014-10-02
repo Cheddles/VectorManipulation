@@ -4,8 +4,8 @@ class Vector{
   float yLoc;  // y-coordinate of base (as number of vector units from screen centre)
   float value;  // value in vector units (not screen dimensions)
   String label;
-  float stringOffsetX;  // offset from x1 (in vector units)
-  float stringOffsetY;  // offset from y1 (in vector units)
+  float dragOffsetX;  // offset from x1 (in vector units)
+  float dragOffsetY;  // offset from y1 (in vector units)
   boolean dragging=false;  // true if being dragged to relocate
   boolean selected=true;  // if currently the selected vector (true when first created)
   boolean forming=true;  // if still being created (true when first created)
@@ -53,9 +53,9 @@ class Vector{
             }
           popMatrix();
         }
-        textSize(20);
-        fill(0);
-        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
+//        textSize(20);
+//        fill(0);
+//        text(str(xLoc)+", "+str(yLoc),location[0], location[1]+20);
         stroke (activeColor);
       }
       drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
@@ -76,7 +76,10 @@ class Vector{
   }
   
   void move (int x, int y){  // move a vector by dragging
-    
+    float[] mouseLoc = new float[2];
+    mouseLoc = screenToVector(x,y);
+    xLoc = mouseLoc[0]-dragOffsetX;
+    yLoc = mouseLoc[1]-dragOffsetY;
   }
   
   boolean click (int x, int y){  // determine if the vector has been clicked on to select/drag (middle 1/3 only)
@@ -84,16 +87,18 @@ class Vector{
     clickLoc=screenToVector(x,y);
     float xComp=value*sin(bearing);  // x-component of vector
     float yComp=value*cos(bearing);  // y-component of vector
-
-    if((clickLoc[0]>(xLoc+xComp/3))&&(clickLoc[0]<(xLoc+2*xComp/3))&&(clickLoc[1]>(yLoc+yComp/3))&&(clickLoc[1]<(yLoc+2*yComp/3))){  //check to make sure in a box around middle 1/3 of the vector
-      //rect(20,20,100,100);
-      testDebug="found one";  //
+    
+    float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
+    if ((r>value/3)&&(r<2*value/3)){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
       float m = 1/tan(bearing);  //slope of the vector
       float b = yLoc-(m*xLoc);  //y-intercept of vector
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
       
-      if (d*scale<(4*lineWeight)){
-        
+      testDebug=str(d);  //
+      
+      if (abs(d*scale)<(2*lineWeight)){
+        dragOffsetX=clickLoc[0]-xLoc;
+        dragOffsetY=clickLoc[1]-yLoc;
         dragging=true;
         selected=true;
         return true;

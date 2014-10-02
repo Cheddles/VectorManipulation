@@ -16,7 +16,7 @@ color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
 
-String testDebug="testing";
+String testDebug="deBug deFault";
 
 void setup(){
  size(horizontalSize,verticalSize);
@@ -34,14 +34,13 @@ axes = new AxisAngle();
 void draw(){
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
-  rect(100,100,100,100);
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
     if(currentVector.forming) {
-      //currentVector.colour = color(255,0,0);
       currentVector.create(mouseX, mouseY);
     }
+    else if (currentVector.dragging) currentVector.move(mouseX, mouseY);
     vectorCollection.set(vectorCollection.size()-1, currentVector);
     //currentVector.display();
     for (int i=0; i<vectorCollection.size(); i++){
@@ -66,11 +65,12 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  text(testDebug, height/50, height/80);
-  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  //text(testDebug, height/50, height/80);
+  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
   axes.drag();
-  axes.display(); 
+  axes.display();
+//  rect(0,0,width/10,height/15);
 }
 
 void mousePressed(){
@@ -80,13 +80,22 @@ void mousePressed(){
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
       foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
-      vectorCollection.set(i, currentVector);
+      if (foundSomething){  //reshuffle vectors to put selected vector at end of arraylist
+        Vector currentVector2 = new Vector(0,0);
+        for (int j=i+1; j<vectorCollection.size(); j++){
+          currentVector2 = (Vector) vectorCollection.get(j);
+          currentVector2.selected=false;
+          vectorCollection.set(j-1, currentVector2);
+        }
+        vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
+      }
+      else {
+        currentVector.selected=false;
+        vectorCollection.set(i, currentVector);
+      }
     }
   }
-//  if(axes.selectedPressed(mouseX, mouseY) || axes.selected){  // only look at vectors if the rotation tool is not being used
-//    
-//  }
-  if (!foundSomething){  // start new vector
+  if ((!foundSomething)&&(!axes.selected)){  // start new vector
     if (vectorCollection.size()>0){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
