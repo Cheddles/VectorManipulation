@@ -1,5 +1,5 @@
-Float scale=100.0;  // pixels of screen distance per unit of vector value (initially set to 100)
-String units=" m"; // units for the vector (with a leading space)
+Float scale=200.0;  // pixels of screen distance per unit of vector value (initially set to 100)
+String units=" N"; // units for the vector (with a leading space)
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
@@ -29,7 +29,7 @@ void setup(){
 //  horizontalComponent = new Arrow (0, 0, 255, lineWeight);
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
-zoom = new Slider(50.0, 500.0, 100.0, 19*height/20);
+zoom = new Slider(10.0, 700.0, scale, 19*height/20);
 //currentVector = new Vector();
 }
 
