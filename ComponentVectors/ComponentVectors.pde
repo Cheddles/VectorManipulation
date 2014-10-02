@@ -72,7 +72,7 @@ void draw(){
   zoom.display();
   axes.drag();
   axes.display();
-  rect(0,0,width/10,height/15);
+  rect(0,0,width/10,height/9);
 }
 
 void mousePressed(){
