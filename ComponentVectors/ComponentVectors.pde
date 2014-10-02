@@ -24,12 +24,10 @@ void setup(){
  if (frame != null) {
     frame.setResizable(true);
  }
-//  totalVector = new Arrow (0, 0, 0, lineWeight);
-//  verticalComponent = new Arrow (255, 0, 0, lineWeight);
-//  horizontalComponent = new Arrow (0, 0, 255, lineWeight);
+
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
-zoom = new Slider(10.0, 700.0, scale, 19*height/20);
+zoom = new Slider(10.0, 700.0, scale, 0.95);
 //currentVector = new Vector();
 }
 
@@ -74,7 +72,7 @@ void draw(){
   zoom.display();
   axes.drag();
   axes.display();
-//  rect(0,0,width/10,height/15);
+  rect(0,0,width/10,height/15);
 }
 
 void mousePressed(){
