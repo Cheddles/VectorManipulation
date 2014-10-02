@@ -29,7 +29,7 @@ class Vector{
     stroke(colour);
     pushMatrix();
       if (selected || (axes.dragging)){
-        if (showComponents){
+        if ((bShowComp.selected)||(axes.dragging)){
           //strokeWeight(max(1, lineWeight/2));
           pushMatrix();
             translate(location[0], location[1]);

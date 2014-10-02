@@ -5,8 +5,8 @@ int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
-boolean showComponents=true;  // show component vectors for selected vector
-boolean showBearing=false;  // show bearing for selected vector
+//boolean showComponents=true;  // show component vectors for selected vector
+//boolean showBearing=false;  // show bearing for selected vector
 ArrayList vectorCollection;
 //int currentVector;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
@@ -19,6 +19,8 @@ color baseColor = color(0);  // default colour of non-selected vector
 
 Button bClear;  //clear all button
 Button bDelete;  //delete current selection button
+Button bShowComp;  // show/hide component vectors for selected vector
+Button bShowBearing;  // show/hide bearing for selected vector
 
 String testDebug="deBug deFault";
 
@@ -27,14 +29,18 @@ void setup(){
  if (frame != null) {
     frame.setResizable(true);
  }
-scale=200.0;
-units=" N";
-vectorCollection = new ArrayList();
-axes = new AxisAngle();
-zoom = new Slider(10.0, 700.0, scale, 0.95);
-bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear");
-bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete");
-//currentVector = new Vector();
+  scale=200.0;
+  units=" N";
+  vectorCollection = new ArrayList();
+  axes = new AxisAngle();
+  zoom = new Slider(10.0, 700.0, scale, 0.95);
+  bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear","all");
+  bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete","selected");
+  bShowComp = new Button(0.0, 2/12.0, 1/9.0, 1/12.0, "Show", "components");
+  bShowComp.selected=true;
+  bShowBearing = new Button(0.0, 3/12.0, 1/9.0, 1/12.0, "Show", "bearing");
+  bShowBearing.selected=false;
+  //currentVector = new Vector();
 }
 
 void draw(){
@@ -44,6 +50,8 @@ void draw(){
   // display button controls
   bClear.display();
   bDelete.display();
+  bShowComp.display();
+  bShowBearing.display();
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
@@ -75,8 +83,8 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  text(testDebug, height/6, height/80);
-  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/6, height/80);
+  text(testDebug, max(height/6, width/8), height/80);
+  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", max(height/6, width/8), height/80);
   
   if (zoom.dragging) zoom.drag();
   zoom.display();
@@ -108,6 +116,14 @@ void mousePressed(){
         }
       }
       bDelete.selected=false;
+    }
+    
+    if(bShowComp.click(mouseX, mouseY)){  //check show components button
+      foundSomething=true;
+    }
+    
+    if(bShowBearing.click(mouseX, mouseY)){  //check show components button
+      foundSomething=true;
     }
   }
   

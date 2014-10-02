@@ -84,16 +84,6 @@ class Slider{
       scale = float(newloc-xmin)/float(xmax-xmin)*(max-min)+min;
     }
   
-//  void hover(int mx, int my) {
-//    float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
-//    if (d < ballDiameter) {
-//      mouseOver = true;
-//    }
-//    else {
-//      mouseOver = false;
-//    }
-//  }
-  
   void drawArrow(){
     int ypix = int(ypos*height);
     // draw a red arrow indicating slider motion
