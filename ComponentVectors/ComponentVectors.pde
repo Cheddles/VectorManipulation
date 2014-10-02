@@ -1,5 +1,5 @@
-Float scale=100.0;  // pixels of screen distance per unit of vector value (initially set to 100)
-String units=" m"; // units for the vector (with a leading space)
+Float scale=200.0;  // pixels of screen distance per unit of vector value (initially set to 100)
+String units=" N"; // units for the vector (with a leading space)
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
@@ -11,10 +11,13 @@ ArrayList vectorCollection;
 //int currentVector;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
+Slider zoom;  // scaling slider
 color yColor = color(0,0,255);  // colour of y and y' component vectors
 color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
+
+Button bClear;  //clear all button
 
 String testDebug="deBug deFault";
 
@@ -23,17 +26,21 @@ void setup(){
  if (frame != null) {
     frame.setResizable(true);
  }
-//  totalVector = new Arrow (0, 0, 0, lineWeight);
-//  verticalComponent = new Arrow (255, 0, 0, lineWeight);
-//  horizontalComponent = new Arrow (0, 0, 255, lineWeight);
+
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
+zoom = new Slider(10.0, 700.0, scale, 0.95);
+bClear = new Button(0.0, 0.0, 1/9.0, 1/9.0, "Clear");
 //currentVector = new Vector();
 }
 
 void draw(){
   lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
   background(255);
+
+  // display button controls
+  bClear.display();
+
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
@@ -65,17 +72,20 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  //text(testDebug, height/50, height/80);
-  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  text(testDebug, height/50, height/80);
+  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
+  if (zoom.dragging) zoom.drag();
+  zoom.display();
   axes.drag();
   axes.display();
-//  rect(0,0,width/10,height/15);
+  //rect(0,0,width/10,height/9);
 }
 
 void mousePressed(){
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   foundSomething = axes.clicked(mouseX,mouseY);
+  foundSomething = zoom.clicked(mouseX, mouseY);
   if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
@@ -107,6 +117,7 @@ void mousePressed(){
 
 void mouseReleased(){
   axes.dragging=false;
+  zoom.dragging=false;
   for (int i=0; i<vectorCollection.size(); i++){
     currentVector= (Vector) vectorCollection.get(i);
     currentVector.dragging=false;
