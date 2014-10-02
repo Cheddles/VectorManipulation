@@ -1,8 +1,8 @@
 class Slider{
  
- int max;  // maximum on the slider line
- int min;  // minimum value on the slider line
- int value;  // current value
+ float max;  // maximum on the slider line
+ float min;  // minimum value on the slider line
+ float value;  // current value
  int xpos;  // x-coordinate of the selection ball
  int ypos;  // y-coordinate of the line and selection ball
  int ballDiameter;
@@ -13,7 +13,7 @@ class Slider{
  int xmin;  // left end of slider line
  int xmax;  // right end of slider line
     
- Slider(int minValue, int maxValue, int startValue, int verticalLocation){
+ Slider(float minValue, float maxValue, float startValue, int verticalLocation){
    //to make available to methods
    max=maxValue;
    min=minValue;
@@ -24,16 +24,17 @@ class Slider{
   void display(){
     stroke(0);
     // recalculate dimensions each time in case window has been resized
-    strokeWeight(int(height/100));
-    xmin=int(width*0.1);
-    xmax=int(width*0.5);
-    ballDiameter = int(min(height/12, width/20));
-    xpos = max(int(float(value-min)/float(max-min)*(xmax-xmin)+xmin),xmin);
+    strokeWeight(max(lineWeight/2,1));
+    xmin=int(width*0.2);
+    xmax=int(width*0.7);
+    ballDiameter = int(min(height/20, width/30));
+    xpos = int((value-min)/(max-min)*(xmax-xmin)+xmin);
     line(xmin,ypos,xmax,ypos);
     
     // display slider
     fill(0);
     if (mouseOver) fill(255);
+    ellipseMode(CENTER);
     ellipse(xpos,ypos,ballDiameter,ballDiameter);
     drawArrow();
     
@@ -66,20 +67,20 @@ class Slider{
 
   }
   
-  void hover(int mx, int my) {
-    float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
-    if (d < ballDiameter) {
-      mouseOver = true;
-    }
-    else {
-      mouseOver = false;
-    }
-  }
+//  void hover(int mx, int my) {
+//    float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
+//    if (d < ballDiameter) {
+//      mouseOver = true;
+//    }
+//    else {
+//      mouseOver = false;
+//    }
+//  }
   
   void drawArrow(){
     // draw a red arrow indicating slider motion
     stroke(255,0,0);
-    strokeWeight(10);
+    //strokeWeight(10);
     strokeCap(ROUND);
     line(xpos-ballDiameter,ypos,xpos+ballDiameter,ypos);
     line(xpos+ballDiameter,ypos,xpos+ballDiameter*0.7,(ypos-ballDiameter*0.5));

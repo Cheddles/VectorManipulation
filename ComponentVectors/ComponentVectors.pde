@@ -11,6 +11,7 @@ ArrayList vectorCollection;
 //int currentVector;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
+Slider zoom;  // scaling slider
 color yColor = color(0,0,255);  // colour of y and y' component vectors
 color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
@@ -28,6 +29,7 @@ void setup(){
 //  horizontalComponent = new Arrow (0, 0, 255, lineWeight);
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
+zoom = new Slider(50.0, 500.0, 100.0, 19*height/20);
 //currentVector = new Vector();
 }
 
@@ -68,6 +70,7 @@ void draw(){
   //text(testDebug, height/50, height/80);
   text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
+  zoom.display();
   axes.drag();
   axes.display();
 //  rect(0,0,width/10,height/15);
