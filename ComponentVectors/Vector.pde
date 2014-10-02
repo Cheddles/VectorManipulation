@@ -26,15 +26,23 @@ class Vector{
   void display(){
     int[] location = new int[2];
     location=vectorToScreen(xLoc, yLoc);
-    if ((selected)&&(bShowBearing.selected)){
+    if ((selected)&&(bShowBearing.selected)){  // draw bearing arrow and show value
       strokeWeight(max(1, lineWeight/3));
       stroke(128);
       line(location[0], location[1], location[0], location[1]-int(2*value*scale/3));
       roundArrow(location[0], location[1], int(value*scale/3), 0.0, bearing);
+      pushMatrix();
+        translate(location[0], location[1]-int(value*scale/3));
+        rotate(-PI/2);
+        fill(0);
+        textSize(height/30);
+        textAlign(CENTER, BOTTOM);
+        text(str(int(degrees(bearing)+0.001))+"°",0,0);
+      popMatrix();
     }
     stroke(colour);
     if (selected || (axes.dragging)){
-      if ((bShowComp.selected)||(axes.dragging)){
+      if ((bShowComp.selected)||(axes.dragging)){  //draw component vectors and show values
         //strokeWeight(max(1, lineWeight/2));
         pushMatrix();
           translate(location[0], location[1]);
