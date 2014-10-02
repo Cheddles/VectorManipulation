@@ -1,5 +1,5 @@
-Float scale=200.0;  // pixels of screen distance per unit of vector value (initially set to 100)
-String units=" N"; // units for the vector (with a leading space)
+Float scale;  // pixels of screen distance per unit of vector value (initially set to 100)
+String units; // units for the vector (with a leading space)
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
@@ -29,12 +29,13 @@ void setup(){
  if (frame != null) {
     frame.setResizable(true);
  }
-
+scale=200.0;
+units=" N";
 vectorCollection = new ArrayList();
 axes = new AxisAngle();
 zoom = new Slider(10.0, 700.0, scale, 0.95);
-bClear = new Button(0.0, 0.0, 1/9.0, 1/9.0, "Clear");
-bDelete = new Button(0.0, 1/9.0, 1/9.0, 1/9.0, "Delete");
+bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear");
+bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete");
 //currentVector = new Vector();
 }
 
@@ -76,8 +77,8 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  //text(testDebug, height/8, height/80);
-  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/6, height/80);
+  text(testDebug, height/6, height/80);
+  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/6, height/80);
   
   if (zoom.dragging) zoom.drag();
   zoom.display();
@@ -88,7 +89,19 @@ void draw(){
 
 void mousePressed(){
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
-  foundSomething = axes.clicked(mouseX,mouseY);
+  
+  // check for button clicks
+  if (mouseX<=width/9){  // only check for button clicks if the mouse is over the button column
+    if(bClear.click(mouseX, mouseY)){  //check clear button
+      foundSomething=true;
+      //use current dimensions to clear display
+      horizontalSize=width;
+      verticalSize=height;
+      setup();
+    }
+  }
+  
+  if (!foundSomething) foundSomething = axes.clicked(mouseX,mouseY);
   if ((!axes.selected)&&(!foundSomething)) foundSomething = zoom.clicked(mouseX, mouseY);
   if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){

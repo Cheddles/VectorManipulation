@@ -30,4 +30,15 @@ class Button{
     text(label, xLoc*width+propWidth*width/2, yLoc*height+propHeight*height/2);
   }
   
+  boolean click(int x, int y){
+    testDebug=str(yLoc*height)+","+str(y)+","+str((yLoc+propHeight)*height);
+    if ((x>(xLoc*width))&&(x<(xLoc+propWidth)*width)&&(y>yLoc*height)&&(y<(yLoc+propHeight)*height)){
+      selected=true;
+      display();
+      testDebug="clicked";
+      return true;
+    }
+    else return false;
+  }
+  
 }
