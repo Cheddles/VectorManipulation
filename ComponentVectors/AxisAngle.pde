@@ -116,13 +116,6 @@ class AxisAngle{
       stroke(yColor);
       drawArrow(0, radius, 2.0*radius,PI, lineWeight);
       stroke(0);
-//      ellipseMode(RADIUS);
-//      ellipse(0,0,2*radius/3,2*radius/3);
-//      //draw red tip to identify the y' axis
-//      fill(255,0,0);
-//      strokeWeight(0);
-//      ellipse(0,-radius, lineWeight, lineWeight);
-      //draw OK and cancel buttons
       rotate(-bPrime);
       textAlign(CENTER, CENTER);
       textSize(height/12);
@@ -178,7 +171,7 @@ class AxisAngle{
     pushMatrix();
       translate(xCentre, yCentre);
       rotate(1.5*PI-startBearing);
-      arc(0,0, radius, radius, 0, arcAngle);
+      arc(0,0, 2*radius, 2*radius, 0, arcAngle);
       rotate(arcAngle);
       //ellipse(radius,0,10,10);
       line(radius,0,radius*(1+min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));

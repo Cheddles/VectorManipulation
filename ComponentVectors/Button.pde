@@ -7,7 +7,7 @@ class Button{
   String label;  //label for button
   boolean selected;  //whether button is selected (persistant toggle)
   color bgActive = color(100,0,100);  // background colour when active
-  color bgInactive= color(255);  // background colour when inactive
+  color bgInactive= color(240);  // background colour when inactive
   color fontActive=color(0);  // font colour when active;
   color fontInactive=color(0);  // font colour when inactive
   
