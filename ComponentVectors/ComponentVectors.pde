@@ -67,9 +67,10 @@ void draw(){
   fill(0);
   textSize(height/40);
   textAlign(LEFT, TOP);
-  //text(testDebug, height/50, height/80);
-  text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
+  text(testDebug, height/50, height/80);
+  //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", height/50, height/80);
   
+  if (zoom.dragging) zoom.drag();
   zoom.display();
   axes.drag();
   axes.display();
@@ -79,6 +80,7 @@ void draw(){
 void mousePressed(){
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   foundSomething = axes.clicked(mouseX,mouseY);
+  foundSomething = zoom.clicked(mouseX, mouseY);
   if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
@@ -110,6 +112,7 @@ void mousePressed(){
 
 void mouseReleased(){
   axes.dragging=false;
+  zoom.dragging=false;
   for (int i=0; i<vectorCollection.size(); i++){
     currentVector= (Vector) vectorCollection.get(i);
     currentVector.dragging=false;

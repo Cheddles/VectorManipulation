@@ -28,12 +28,12 @@ class Slider{
     xmin=int(width*0.2);
     xmax=int(width*0.7);
     ballDiameter = int(min(height/20, width/30));
-    xpos = int((value-min)/(max-min)*(xmax-xmin)+xmin);
+    xpos = int((scale-min)/(max-min)*(xmax-xmin)+xmin);
     line(xmin,ypos,xmax,ypos);
     
     // display slider
     fill(0);
-    if (mouseOver) fill(255);
+    //if (mouseOver) fill(255);
     ellipseMode(CENTER);
     ellipse(xpos,ypos,ballDiameter,ballDiameter);
     drawArrow();
@@ -42,30 +42,32 @@ class Slider{
     if (!clickedOnce) {
       textSize(height*0.028);
       fill(127);
-      text("drag to change scale (will clear drawn vectors)", (xmin+xmax)/2, ypos-height*0.065);
+//      text("drag to change scale (will clear drawn vectors)", (xmin+xmax)/2, ypos-height*0.065);
     }
   }
   
-  void clicked(int mx, int my) {
+  boolean clicked(int mx, int my) {
     float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
-    if (d < ballDiameter) {
+    if (dragging) return true;
+    else if (d < ballDiameter) {
       dragging = true;
       clickedOnce=true;
-      dragOffset = xpos-mx;
+      dragOffset = mx-xpos;
+      return true;
     }
+    return false;
   }
   
   void drag() {
-      int newloc = mouseX + dragOffset;
+      int newloc = mouseX - dragOffset;
       //stop out of range dragging
       if (newloc>xmax) newloc=xmax;
       if (newloc<xmin) newloc=xmin;
       
-      //check to see if moved far enough for integer change
-      if ((newloc-xpos)>(xmax-xmin)/(2*(max-min))) value++;
-      if ((xpos-newloc)>(xmax-xmin)/(2*(max-min))) value--;
-
-  }
+      //convert location to scale value
+      scale = float(newloc-xmin)/float(xmax-xmin)*(max-min)+min;
+      testDebug=str(scale);
+    }
   
 //  void hover(int mx, int my) {
 //    float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
