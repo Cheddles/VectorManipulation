@@ -34,11 +34,11 @@ void setup(){
   vectorCollection = new ArrayList();
   axes = new AxisAngle();
   zoom = new Slider(10.0, 700.0, scale, 0.95);
-  bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear","all");
-  bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete","selected");
-  bShowComp = new Button(0.0, 2/12.0, 1/9.0, 1/12.0, "Show", "components");
+  bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear","all", "Start new free body diagram");
+  bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete","selected", "Delete the selected item");
+  bShowComp = new Button(0.0, 2/12.0, 1/9.0, 1/12.0, "Show", "components", "Show component vectors for the active vector");
   bShowComp.selected=true;
-  bShowBearing = new Button(0.0, 3/12.0, 1/9.0, 1/12.0, "Show", "bearing");
+  bShowBearing = new Button(0.0, 3/12.0, 1/9.0, 1/12.0, "Show", "bearing", "Show bearing for the active vector");
   bShowBearing.selected=false;
   //currentVector = new Vector();
 }
@@ -52,6 +52,15 @@ void draw(){
   bDelete.display();
   bShowComp.display();
   bShowBearing.display();
+  
+  // display mouseover text if mouse is over any buttons
+  if (mouseX<=width/9){  // only check if the mouse is over the button column
+    bClear.hover(mouseX, mouseY);
+    bDelete.hover(mouseX, mouseY);
+    bShowComp.hover(mouseX, mouseY);
+    bShowBearing.hover(mouseX, mouseY);
+    //b###.hover(mouseX, mouseY);
+  }
 
   if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
