@@ -46,7 +46,7 @@ class Button{
       fill(0);
       textAlign(LEFT, CENTER);
       textSize(propHeight*height/3);
-      text(hoverText, (buttonWidth)*width*1.1, (yLoc+propHeight/2)*height);
+      text(hoverText, (xLoc+propWidth)*width*1.1, (yLoc+propHeight/2)*height);
     }
   }
   
