@@ -130,6 +130,7 @@ class Vector{
         dragOffsetY=clickLoc[1]-yLoc;
         dragging=true;
         selected=true;
+        //testDebug=str(selected);
         return true;
       }
     }

@@ -1,15 +1,16 @@
 Float scale;  // pixels of screen distance per unit of vector value (initially set to 100)
 String units; // units for the vector (with a leading space)
+float buttonWidth=1/9.0;  // standard button width (as a proportion of the window)
+float buttonHeight=1/12.0;  // standard button height (as a proportion of the window)
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
-//boolean showComponents=true;  // show component vectors for selected vector
-//boolean showBearing=false;  // show bearing for selected vector
 ArrayList vectorCollection;
-//int currentVector;  // current vector number within vectorCollection
-Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
+int selectedCount;  // current vector number within vectorCollection
+Vector currentVector;  // the vector currently pulled from vectorCollection
+Vector selectedVector = new Vector(0,0);  //holding vector to display last
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
 Slider zoom;  // scaling slider
 color yColor = color(0,0,255);  // colour of y and y' component vectors
@@ -19,26 +20,31 @@ color baseColor = color(0);  // default colour of non-selected vector
 
 Button bClear;  //clear all button
 Button bDelete;  //delete current selection button
+Button bPrev;  //select previous vector button
+Button bNext;  //select next vector button
 Button bShowComp;  // show/hide component vectors for selected vector
 Button bShowBearing;  // show/hide bearing for selected vector
 
 String testDebug="deBug deFault";
 
 void setup(){
- size(horizontalSize,verticalSize);
- if (frame != null) {
+  size(horizontalSize,verticalSize);
+  if (frame != null) {
     frame.setResizable(true);
- }
+  }
+  //frameRate(25);
   scale=200.0;
   units=" N";
   vectorCollection = new ArrayList();
   axes = new AxisAngle();
   zoom = new Slider(10.0, 700.0, scale, 0.95);
-  bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear","all", "Start new free body diagram");
-  bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete","selected", "Delete the selected item");
-  bShowComp = new Button(0.0, 2/12.0, 1/9.0, 1/12.0, "Show", "components", "Show component vectors for the active vector");
+  bClear = new Button(0*buttonWidth, 0*buttonHeight, buttonWidth, buttonHeight, "Clear","all", "Start new free body diagram");
+  bDelete = new Button(0*buttonWidth, 1*buttonHeight, buttonWidth, buttonHeight, "Delete","selected", "Delete the selected item");
+  bPrev = new Button(0*buttonWidth, 2*buttonHeight, buttonWidth/2, buttonHeight, "prev","<-", "Select previous vector");
+  bNext = new Button(0.5*buttonWidth, 2*buttonHeight, buttonWidth/2, buttonHeight, "next","->", "Select next vector");
+  bShowComp = new Button(0*buttonWidth, 3*buttonHeight, buttonWidth, buttonHeight, "Show", "components", "Show component vectors for the active vector");
   bShowComp.selected=true;
-  bShowBearing = new Button(0.0, 3/12.0, 1/9.0, 1/12.0, "Show", "bearing", "Show bearing for the active vector");
+  bShowBearing = new Button(0*buttonWidth, 4*buttonHeight, buttonWidth, buttonHeight, "Show", "bearing", "Show bearing for the active vector");
   bShowBearing.selected=false;
   //currentVector = new Vector();
 }
@@ -50,6 +56,8 @@ void draw(){
   // display button controls
   bClear.display();
   bDelete.display();
+  bPrev.display();
+  bNext.display();
   bShowComp.display();
   bShowBearing.display();
   
@@ -57,22 +65,38 @@ void draw(){
   if (mouseX<=width/9){  // only check if the mouse is over the button column
     bClear.hover(mouseX, mouseY);
     bDelete.hover(mouseX, mouseY);
+    bPrev.hover(mouseX, mouseY);
+    bNext.hover(mouseX, mouseY);
     bShowComp.hover(mouseX, mouseY);
     bShowBearing.hover(mouseX, mouseY);
     //b###.hover(mouseX, mouseY);
   }
 
   if (vectorCollection.size()>0){
-    currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
-    if(currentVector.forming) {
-      currentVector.create(mouseX, mouseY);
-    }
-    else if (currentVector.dragging) currentVector.move(mouseX, mouseY);
-    vectorCollection.set(vectorCollection.size()-1, currentVector);
-    //currentVector.display();
+//    currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
+//    if(currentVector.forming) {
+//      currentVector.create(mouseX, mouseY);
+//    }
+//    else if (currentVector.dragging) currentVector.move(mouseX, mouseY);
+//    vectorCollection.set(vectorCollection.size()-1, currentVector);
+//    //currentVector.display();
+    selectedVector.selected = false;  // default to not selected to detect when not used
     for (int i=0; i<vectorCollection.size(); i++){
-      currentVector= (Vector) vectorCollection.get(i);
-      currentVector.display();
+      currentVector = (Vector) vectorCollection.get(i);
+      if (i!=selectedCount){
+        currentVector.display();
+      }
+      else{
+        selectedVector=currentVector;
+        
+      }
+      vectorCollection.set(i, currentVector);
+    }
+    if (selectedVector.selected){
+      if (selectedVector.forming) selectedVector.create(mouseX, mouseY);
+      if (selectedVector.dragging) selectedVector.move(mouseX, mouseY);
+      selectedVector.display();
+    //if (currentVector.selected) testDebug=str(i);
     }
   }
 
@@ -95,8 +119,8 @@ void draw(){
     fill(0);
     textSize(height/40);
     textAlign(RIGHT, TOP);
-    //text(testDebug, 0, 0);
-    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+    text(testDebug, 0, 0);
+    //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
   
   if (zoom.dragging) zoom.drag();
@@ -131,6 +155,16 @@ void mousePressed(){
       bDelete.selected=false;
     }
     
+    if(bPrev.click(mouseX, mouseY)){  //check select previous button
+      foundSomething=true;
+    }
+    
+    if(bNext.click(mouseX, mouseY)){  //check select next button
+      foundSomething=true;
+      bNext.display();
+      bNext.selected=false;
+    }
+    
     if(bShowComp.click(mouseX, mouseY)){  //check show components button
       foundSomething=true;
     }
@@ -145,20 +179,25 @@ void mousePressed(){
   if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
+      currentVector.selected = false;
       foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
-      if (foundSomething){  //reshuffle vectors to put selected vector at end of arraylist
-        Vector currentVector2 = new Vector(0,0);
+      vectorCollection.set(i, currentVector);
+      if (foundSomething){  //skips through remaining vectors to set all as not selected
+        selectedCount=i;
+        testDebug="selected="+str(selectedCount)+" "+str(currentVector.selected);
+        //Vector currentVector2 = new Vector(0,0);
         for (int j=i+1; j<vectorCollection.size(); j++){
-          currentVector2 = (Vector) vectorCollection.get(j);
-          currentVector2.selected=false;
-          vectorCollection.set(j-1, currentVector2);
+          currentVector = (Vector) vectorCollection.get(j);
+          currentVector.selected=false;
+          vectorCollection.set(j, currentVector);
+          i=j;
         }
-        vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
+        //vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
       }
-      else {
-        currentVector.selected=false;
-        vectorCollection.set(i, currentVector);
-      }
+//      else {
+//        currentVector.selected=false;
+//        vectorCollection.set(i, currentVector);
+//      }
     }
   }
   if ((!foundSomething)&&(!axes.selected)){  // start new vector
@@ -166,6 +205,7 @@ void mousePressed(){
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
       vectorCollection.set(vectorCollection.size()-1, currentVector);
+      selectedCount=vectorCollection.size();
     }
     vectorCollection.add(new Vector(mouseX, mouseY));
   }
