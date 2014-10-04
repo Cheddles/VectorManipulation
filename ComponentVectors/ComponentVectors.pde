@@ -7,7 +7,7 @@ int verticalSize=600;  // horizontal size of the screen
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
 ArrayList vectorCollection;
-int selectedCount;  // current vector number within vectorCollection
+int selectedCount=-1;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
 Slider zoom;  // scaling slider
@@ -129,6 +129,7 @@ void mousePressed(){
     if(bDelete.click(mouseX, mouseY)){  //check delete button
       foundSomething=true;
       deleteCurrentVector();
+      bDelete.selected=false;
     }
     
     if(bShowComp.click(mouseX, mouseY)){  //check show components button
@@ -170,7 +171,7 @@ void mousePressed(){
     }
   }
   if ((!foundSomething)&&(!axes.selected)){  // start new vector
-    if (vectorCollection.size()>0){  // deselect the previously-selected vector
+    if (selectedCount!=-1){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
       vectorCollection.set(vectorCollection.size()-1, currentVector);
@@ -189,4 +190,33 @@ void mouseReleased(){
     currentVector.forming=false;
     vectorCollection.set(i, currentVector);
   }
+}
+
+void keyPressed() {
+  if (key==CODED){
+    if (keyCode == LEFT){
+      previousVector();
+    }
+    if (keyCode == RIGHT){
+      nextVector();
+    }
+  }
+  if ((keyCode == RETURN)||(keyCode == ENTER)||(keyCode==TAB)){
+    nextVector();
+  }
+  if (keyCode == ESC){
+      key=0;  //stop the program closing down entirely
+      axes.selected=false;
+  }
+  
+    
+//  if (keyCode == BACKSPACE) {
+//    if (myText.length() > 0) {
+//      myText = myText.substring(0, myText.length()-1);
+//    }
+//  } else if (keyCode == DELETE) {
+//    myText = "";
+//  } else if (keyCode != SHIFT && keyCode != CONTROL && keyCode != ALT) {
+//    myText = myText + key;
+//  }
 }

@@ -8,14 +8,17 @@ void deleteAll(){
 }
 
 void deleteCurrentVector(){
-  for (int i=0; i<vectorCollection.size(); i++){
-    currentVector= (Vector) vectorCollection.get(i);
-    if (currentVector.selected){
-      vectorCollection.remove(i);
-      i=i-1;  //to account for renumbering a shorter array list
+  if (selectedCount!=-1){
+    vectorCollection.remove(selectedCount);
+    if (vectorCollection.size()==0) selectedCount=-1;  //reset the "no vectors" flag
+    else if (selectedCount==0) selectedCount=vectorCollection.size()-1;
+    else selectedCount--;
+    if (selectedCount!=-1){
+      currentVector= (Vector) vectorCollection.get(selectedCount);
+      currentVector.selected=true;
+      vectorCollection.set(selectedCount, currentVector);
     }
   }
-      bDelete.selected=false;
 }
 
 void previousVector(){
