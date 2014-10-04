@@ -65,18 +65,7 @@ void draw(){
   bNext.display();
   bInverse.display();
   
-  // display mouseover text if mouse is over any buttons
-  if (mouseX<=width/9){  // only check if the mouse is over the button column
-    bClear.hover(mouseX, mouseY);
-    bDelete.hover(mouseX, mouseY);
-    bShowComp.hover(mouseX, mouseY);
-    bShowBearing.hover(mouseX, mouseY);
-    bPrev.hover(mouseX, mouseY);
-    bNext.hover(mouseX, mouseY);
-    bInverse.hover(mouseX, mouseY);
-  }
-
-  if (vectorCollection.size()>0){
+ if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
     if(currentVector.forming) {
       currentVector.create(mouseX, mouseY);
@@ -104,6 +93,18 @@ void draw(){
       text("it length and direction", 0, height/8);
     popMatrix();
   }
+  
+  // display mouseover text if mouse is over any buttons
+  if (mouseX<=width/9){  // only check if the mouse is over the button column
+    bClear.hover(mouseX, mouseY);
+    bDelete.hover(mouseX, mouseY);
+    bShowComp.hover(mouseX, mouseY);
+    bShowBearing.hover(mouseX, mouseY);
+    bPrev.hover(mouseX, mouseY);
+    bNext.hover(mouseX, mouseY);
+    bInverse.hover(mouseX, mouseY);
+  }
+  
   
   // assign attribution and provide link for feedback
   pushMatrix();
@@ -222,6 +223,9 @@ void keyPressed() {
   if (keyCode == ESC){
       key=0;  //stop the program closing down entirely
       axes.selected=false;
+  }
+  if ((keyCode == BACKSPACE)||(keyCode == DELETE)) {
+    deleteCurrentVector();
   }
   
     
