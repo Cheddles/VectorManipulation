@@ -50,7 +50,7 @@ void setup(){
 }
 
 void draw(){
-  lineWeight = max(2,int(float(horizontalSize)/100.0));  // set line weight for all vector arrows
+  lineWeight = max(2,int(float(width/150)));  // set line weight for all vector arrows
   background(255);
 
   // display button controls
@@ -138,6 +138,19 @@ void mousePressed(){
     if(bShowBearing.click(mouseX, mouseY)){  //check show components button
       foundSomething=true;
     }
+    
+    if(bPrev.click(mouseX, mouseY)){  //check previous vector button
+      foundSomething=true;
+      previousVector();
+      bPrev.selected=false;
+    }
+    
+    if(bNext.click(mouseX, mouseY)){  //check previous vector button
+      foundSomething=true;
+      nextVector();
+      bNext.selected=false;
+    }
+    
   }
   
   if (!foundSomething) foundSomething = axes.clicked(mouseX,mouseY);
@@ -163,6 +176,7 @@ void mousePressed(){
       vectorCollection.set(vectorCollection.size()-1, currentVector);
     }
     vectorCollection.add(new Vector(mouseX, mouseY));
+    selectedCount=vectorCollection.size()-1;
   }
 }
 
