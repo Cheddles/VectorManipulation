@@ -75,6 +75,9 @@ class Vector{
                   int(0.5*value*scale*cos(bearing-axes.bPrime)),int(value*scale*sin(bearing-axes.bPrime))+width/100);
             }
             else{
+              rotate(PI/2);
+              text(String.format("%.2f", abs((value*cos(bearing-axes.bPrime))))+units,
+              int(-0.5*value*scale*cos(bearing-axes.bPrime)),int(-value*scale*sin(bearing-axes.bPrime))+width/100);
             }
           popMatrix();
         popMatrix();
