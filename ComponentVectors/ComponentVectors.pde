@@ -8,7 +8,7 @@ boolean clickedOnce=false; // (will need this per on-screen object)
 //boolean showComponents=true;  // show component vectors for selected vector
 //boolean showBearing=false;  // show bearing for selected vector
 ArrayList vectorCollection;
-//int currentVector;  // current vector number within vectorCollection
+int selectedCount;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
 Slider zoom;  // scaling slider
@@ -95,8 +95,8 @@ void draw(){
     fill(0);
     textSize(height/40);
     textAlign(RIGHT, TOP);
-    //text(testDebug, 0, 0);
-    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+    text(testDebug, 0, 0);
+    //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
   
   if (zoom.dragging) zoom.drag();
@@ -107,6 +107,7 @@ void draw(){
 }
 
 void mousePressed(){
+  testDebug="";
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   
   // check for button clicks
@@ -145,20 +146,15 @@ void mousePressed(){
   if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
-      foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
-      if (foundSomething){  //reshuffle vectors to put selected vector at end of arraylist
-        Vector currentVector2 = new Vector(0,0);
-        for (int j=i+1; j<vectorCollection.size(); j++){
-          currentVector2 = (Vector) vectorCollection.get(j);
-          currentVector2.selected=false;
-          vectorCollection.set(j-1, currentVector2);
+      currentVector.selected=false;
+      if (!foundSomething){  //only check for clicks if a vector hasn't already been selected
+        foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
+        testDebug=testDebug+"found vector "+str(i);
+         if (foundSomething){
+          selectedCount=i;  //note which vector is selected
         }
-        vectorCollection.set(vectorCollection.size()-1, currentVector);  //put currentVector last
       }
-      else {
-        currentVector.selected=false;
-        vectorCollection.set(i, currentVector);
-      }
+      vectorCollection.set(i, currentVector);
     }
   }
   if ((!foundSomething)&&(!axes.selected)){  // start new vector
