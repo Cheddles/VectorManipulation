@@ -3,6 +3,7 @@ String units; // units for the vector (with a leading space)
 
 int horizontalSize=800;  // horizontal size of the screen
 int verticalSize=600;  // horizontal size of the screen
+
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
 //boolean showComponents=true;  // show component vectors for selected vector
@@ -17,10 +18,15 @@ color xColor = color(0,180,0);  // colour of x and x' component vectors
 color activeColor = color(255,0,0);  // colour of currently-selected vector
 color baseColor = color(0);  // default colour of non-selected vector
 
-Button bClear;  //clear all button
-Button bDelete;  //delete current selection button
+// define buttons
+float buttonHeight=1/12.0;  // standard button height as a proportion of the window
+float buttonWidth=1/9.0;  //standard button width as a proportion of the window
+Button bClear;  // start again
+Button bDelete;  // delete current vector
 Button bShowComp;  // show/hide component vectors for selected vector
 Button bShowBearing;  // show/hide bearing for selected vector
+Button bPrev;  // select previous vector
+Button bNext;  // select next vector
 
 String testDebug="deBug deFault";
 
@@ -34,12 +40,14 @@ void setup(){
   vectorCollection = new ArrayList();
   axes = new AxisAngle();
   zoom = new Slider(10.0, 700.0, scale, 0.95);
-  bClear = new Button(0.0, 0.0, 1/9.0, 1/12.0, "Clear","all", "Start new free body diagram");
-  bDelete = new Button(0.0, 1/12.0, 1/9.0, 1/12.0, "Delete","selected", "Delete the selected item");
-  bShowComp = new Button(0.0, 2/12.0, 1/9.0, 1/12.0, "Show", "components", "Show component vectors for the active vector");
+  bClear = new Button(0*buttonWidth, 0*buttonHeight, buttonWidth, buttonHeight, "Clear","all", "Start new free body diagram");
+  bDelete = new Button(0*buttonWidth, 1*buttonHeight, buttonWidth, buttonHeight, "Delete","selected", "Delete the selected item");
+  bShowComp = new Button(0*buttonWidth, 2*buttonHeight, buttonWidth, buttonHeight, "Show", "components", "Show component vectors for the active vector");
   bShowComp.selected=true;
-  bShowBearing = new Button(0.0, 3/12.0, 1/9.0, 1/12.0, "Show", "bearing", "Show bearing for the active vector");
+  bShowBearing = new Button(0*buttonWidth, 3*buttonHeight, buttonWidth, buttonHeight, "Show", "bearing", "Show bearing for the active vector");
   bShowBearing.selected=false;
+  bPrev = new Button(0*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Prev", "<-", "Select previous vector");
+  bNext = new Button(0.5*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Next", "->", "Select next vector");
   //currentVector = new Vector();
 }
 
@@ -52,6 +60,8 @@ void draw(){
   bDelete.display();
   bShowComp.display();
   bShowBearing.display();
+  bPrev.display();
+  bNext.display();
   
   // display mouseover text if mouse is over any buttons
   if (mouseX<=width/9){  // only check if the mouse is over the button column
@@ -59,7 +69,8 @@ void draw(){
     bDelete.hover(mouseX, mouseY);
     bShowComp.hover(mouseX, mouseY);
     bShowBearing.hover(mouseX, mouseY);
-    //b###.hover(mouseX, mouseY);
+    bPrev.hover(mouseX, mouseY);
+    bNext.hover(mouseX, mouseY);
   }
 
   if (vectorCollection.size()>0){
