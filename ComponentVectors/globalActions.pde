@@ -46,3 +46,12 @@ void nextVector(){
   testDebug=testDebug+str(selectedCount) + "set true";
   vectorCollection.set(selectedCount, currentVector);
 }
+
+void createInverse(){
+  currentVector=(Vector) vectorCollection.get(selectedCount);  //pull selected vector from list
+  currentVector2=currentVector;  //invert it
+  currentVector2.bearing=currentVector2.bearing+PI;
+  if (currentVector2.bearing>2*PI) currentVector2.bearing=currentVector2.bearing-2*PI;  //bring bearing back into 0-2PI range
+  vectorCollection.add(currentVector2);  //push inverted matrix to the end of the list
+  selectedCount=vectorCollection.size()-1;  // select the new, inverted vector
+}

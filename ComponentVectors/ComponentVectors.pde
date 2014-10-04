@@ -8,7 +8,8 @@ int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
 ArrayList vectorCollection;
 int selectedCount=-1;  // current vector number within vectorCollection
-Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
+Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)
+Vector currentVector2;  // another holding vector;
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
 Slider zoom;  // scaling slider
 color yColor = color(0,0,255);  // colour of y and y' component vectors
@@ -25,6 +26,7 @@ Button bShowComp;  // show/hide component vectors for selected vector
 Button bShowBearing;  // show/hide bearing for selected vector
 Button bPrev;  // select previous vector
 Button bNext;  // select next vector
+Button bInverse;  //create inverse (negative) vector
 
 String testDebug="deBug deFault";
 
@@ -46,6 +48,7 @@ void setup(){
   bShowBearing.selected=false;
   bPrev = new Button(0*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Prev", "<-", "Select previous vector");
   bNext = new Button(0.5*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Next", "->", "Select next vector");
+  bInverse = new Button(0*buttonWidth, 5*buttonHeight, buttonWidth, buttonHeight, "Create", "inverse", "Create an inverse of the selected vector");
   //currentVector = new Vector();
 }
 
@@ -60,6 +63,7 @@ void draw(){
   bShowBearing.display();
   bPrev.display();
   bNext.display();
+  bInverse.display();
   
   // display mouseover text if mouse is over any buttons
   if (mouseX<=width/9){  // only check if the mouse is over the button column
@@ -69,6 +73,7 @@ void draw(){
     bShowBearing.hover(mouseX, mouseY);
     bPrev.hover(mouseX, mouseY);
     bNext.hover(mouseX, mouseY);
+    bInverse.hover(mouseX, mouseY);
   }
 
   if (vectorCollection.size()>0){
@@ -152,6 +157,11 @@ void mousePressed(){
       bNext.selected=false;
     }
     
+    if(bInverse.click(mouseX, mouseY)){  //check previous vector button
+      foundSomething=true;
+      createInverse();
+      bInverse.selected=false;
+    }
   }
   
   if (!foundSomething) foundSomething = axes.clicked(mouseX,mouseY);
