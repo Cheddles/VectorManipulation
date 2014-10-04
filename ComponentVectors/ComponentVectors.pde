@@ -6,8 +6,6 @@ int verticalSize=600;  // horizontal size of the screen
 
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
-//boolean showComponents=true;  // show component vectors for selected vector
-//boolean showBearing=false;  // show bearing for selected vector
 ArrayList vectorCollection;
 int selectedCount;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)       
@@ -125,22 +123,12 @@ void mousePressed(){
   if (mouseX<=width/9){  // only check for button clicks if the mouse is over the button column
     if(bClear.click(mouseX, mouseY)){  //check clear button
       foundSomething=true;
-      //use current dimensions to clear display
-      horizontalSize=width;
-      verticalSize=height;
-      setup();
+      deleteAll();
     }
     
     if(bDelete.click(mouseX, mouseY)){  //check delete button
       foundSomething=true;
-      for (int i=0; i<vectorCollection.size(); i++){
-        currentVector= (Vector) vectorCollection.get(i);
-        if (currentVector.selected){
-          vectorCollection.remove(i);
-          i=i-1;  //to account for renumbering a shorter array list
-        }
-      }
-      bDelete.selected=false;
+      deleteCurrentVector();
     }
     
     if(bShowComp.click(mouseX, mouseY)){  //check show components button
