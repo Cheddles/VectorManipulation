@@ -81,11 +81,14 @@ void draw(){
     if(currentVector.forming) {
       currentVector.create(mouseX, mouseY);
     }
-    else if (currentVector.dragging) currentVector.move(mouseX, mouseY);
     vectorCollection.set(vectorCollection.size()-1, currentVector);
     //currentVector.display();
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
+      if (currentVector.dragging){
+        currentVector.move(mouseX, mouseY);
+        vectorCollection.set(i, currentVector);
+      }
       currentVector.display();
     }
   }
