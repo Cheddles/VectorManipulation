@@ -119,11 +119,15 @@ class Vector{
   boolean click (int x, int y){  // determine if the vector has been clicked on to select/drag (middle 1/3 only)
     float[] clickLoc = new float[2];  // location of mouse click in vector units
     clickLoc=screenToVector(x,y);
+    float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
+    testDebug=testDebug+str(degrees(clickBearing))+". ";
     float xComp=value*sin(bearing);  // x-component of vector
     float yComp=value*cos(bearing);  // y-component of vector
     
     float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
-    if ((r>value/3)&&(r<2*value/3)){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
+    if ((r>value/3)
+        &&(r<2*value/3)
+        &&((abs(clickBearing-bearing)<PI/20)||((abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
       float m = 1/tan(bearing);  //slope of the vector
       float b = yLoc-(m*xLoc);  //y-intercept of vector
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);

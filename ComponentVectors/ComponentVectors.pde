@@ -78,6 +78,7 @@ void draw(){
         currentVector.move(mouseX, mouseY);
         vectorCollection.set(i, currentVector);
       }
+      //testDebug=testDebug+" "+str(i)+" ";
       currentVector.display();
     }
   }
@@ -125,7 +126,7 @@ void draw(){
 }
 
 void mousePressed(){
-  //testDebug="";
+  testDebug="";
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   
   // check for button clicks
@@ -162,7 +163,7 @@ void mousePressed(){
     }
     
     if(bInverse.click(mouseX, mouseY)){  //check previous vector button
-      testDebug="inverting";
+      //testDebug="inverting";
       foundSomething=true;
       createInverse();
       bInverse.selected=false;
@@ -176,6 +177,7 @@ void mousePressed(){
       currentVector= (Vector) vectorCollection.get(i);
       currentVector.selected=false;
       if (!foundSomething){  //only check for clicks if a vector hasn't already been selected
+        testDebug=testDebug+str(i)+", ";
         foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
         //testDebug=testDebug+"found vector "+str(i);
          if (foundSomething){
@@ -192,7 +194,7 @@ void mousePressed(){
       vectorCollection.set(vectorCollection.size()-1, currentVector);
     }
     vectorCollection.add(new Vector(mouseX, mouseY));
-    testDebug="makingNew";
+    //testDebug="makingNew";
     selectedCount=vectorCollection.size()-1;
   }
 }
