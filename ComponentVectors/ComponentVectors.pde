@@ -27,6 +27,10 @@ Button bShowBearing;  // show/hide bearing for selected vector
 Button bPrev;  // select previous vector
 Button bNext;  // select next vector
 Button bInverse;  //create inverse (negative) vector
+Button bLabel;  //edit vector label
+Button bUnits;  //enter system units
+StringInput getText;  // = new StringInput;  //string input tool for vector labels
+// StringInput getUnits = new StringInput;  //string input tool for vector labels
 
 String testDebug="deBug deFault";
 
@@ -38,6 +42,7 @@ void setup(){
   scale=200.0;
   units=" N";
   vectorCollection = new ArrayList();
+  getText = new StringInput("title", "default");
   axes = new AxisAngle();
   zoom = new Slider(10.0, 700.0, scale, 0.95);
   bClear = new Button(0*buttonWidth, 0*buttonHeight, buttonWidth, buttonHeight, "Clear","all", "Start new free body diagram");
@@ -49,6 +54,8 @@ void setup(){
   bPrev = new Button(0*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Prev", "<-", "Select previous vector");
   bNext = new Button(0.5*buttonWidth, 4*buttonHeight, 0.5*buttonWidth, buttonHeight, "Next", "->", "Select next vector");
   bInverse = new Button(0*buttonWidth, 5*buttonHeight, buttonWidth, buttonHeight, "Create", "inverse", "Create an inverse of the selected vector");
+  bLabel = new Button(0*buttonWidth, 6*buttonHeight, buttonWidth, buttonHeight, "Label", "", "Edit vector label");
+  bUnits = new Button(0*buttonWidth, 7*buttonHeight, buttonWidth, buttonHeight, "Units", "", "Enter units (changes for all vectors)");
   //currentVector = new Vector();
 }
 
@@ -64,6 +71,8 @@ void draw(){
   bPrev.display();
   bNext.display();
   bInverse.display();
+  bLabel.display();
+  bUnits.display();
   
  if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
@@ -94,9 +103,11 @@ void draw(){
       text("it length and direction", 0, height/8);
     popMatrix();
   }
-  
+  if (getText.entering){
+    getText.display();
+  }
   // display mouseover text if mouse is over any buttons
-  if (mouseX<=width/9){  // only check if the mouse is over the button column
+  else if (mouseX<=width/9){  // only check if the mouse is over the button column
     bClear.hover(mouseX, mouseY);
     bDelete.hover(mouseX, mouseY);
     bShowComp.hover(mouseX, mouseY);
@@ -104,6 +115,8 @@ void draw(){
     bPrev.hover(mouseX, mouseY);
     bNext.hover(mouseX, mouseY);
     bInverse.hover(mouseX, mouseY);
+    bLabel.hover(mouseX, mouseY);
+    bUnits.hover(mouseX, mouseY);
   }
   
   
@@ -168,6 +181,16 @@ void mousePressed(){
       createInverse();
       bInverse.selected=false;
     }
+    
+    if(bLabel.click(mouseX, mouseY)&&(selectedCount>0)){  //check show components button
+      foundSomething=true;
+      currentVector= (Vector) vectorCollection.get(selectedCount);
+      getText=new StringInput("vector label", currentVector.label);
+    }
+    
+    if(bUnits.click(mouseX, mouseY)){  //check show components button
+      foundSomething=true;
+    }
   }
   
   if (!foundSomething) foundSomething = axes.clicked(mouseX,mouseY);
@@ -193,7 +216,7 @@ void mousePressed(){
       currentVector.selected=false;
       vectorCollection.set(vectorCollection.size()-1, currentVector);
     }
-    vectorCollection.add(new Vector(mouseX, mouseY));
+    vectorCollection.add(new Vector(mouseX, mouseY, "vector"));
     //testDebug="makingNew";
     selectedCount=vectorCollection.size()-1;
   }
@@ -211,25 +234,29 @@ void mouseReleased(){
 }
 
 void keyPressed() {
-  if (key==CODED){
-    if (keyCode == LEFT){
-      previousVector();
+  if (getText.entering){
+    getText.addCharacter(key);
+  }
+  else{
+    if (key==CODED){
+      if (keyCode == LEFT){
+        previousVector();
+      }
+      if (keyCode == RIGHT){
+        nextVector();
+      }
     }
-    if (keyCode == RIGHT){
+    if ((keyCode == RETURN)||(keyCode == ENTER)||(keyCode==TAB)){
       nextVector();
     }
+    if (keyCode == ESC){
+        key=0;  //stop the program closing down entirely
+        axes.selected=false;
+    }
+    if ((keyCode == BACKSPACE)||(keyCode == DELETE)) {
+      deleteCurrentVector();
+    }
   }
-  if ((keyCode == RETURN)||(keyCode == ENTER)||(keyCode==TAB)){
-    nextVector();
-  }
-  if (keyCode == ESC){
-      key=0;  //stop the program closing down entirely
-      axes.selected=false;
-  }
-  if ((keyCode == BACKSPACE)||(keyCode == DELETE)) {
-    deleteCurrentVector();
-  }
-  
     
 //  if (keyCode == BACKSPACE) {
 //    if (myText.length() > 0) {

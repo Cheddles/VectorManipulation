@@ -51,16 +51,18 @@ void createInverse(){
   if (selectedCount!=-1){
     float tempBearing;
     float tempSize;
+    String tempLabel;
     int[] tempScr = new int[2];
     
     currentVector=(Vector) vectorCollection.get(selectedCount);  //pull selected vector from list
     tempScr=currentVector.vectorToScreen(currentVector.xLoc, currentVector.yLoc);
     tempSize=currentVector.value;
+    tempLabel=currentVector.label;
     tempBearing=currentVector.bearing+PI;
     if (tempBearing>2*PI) tempBearing=tempBearing-2*PI;
     currentVector.selected=false;
     vectorCollection.set(selectedCount, currentVector);  
-    vectorCollection.add(new Vector(tempScr[0], tempScr[1]));
+    vectorCollection.add(new Vector(tempScr[0], tempScr[1], "(inverse of) "+tempLabel));
     selectedCount=vectorCollection.size()-1;  //select the new vector
     currentVector=(Vector) vectorCollection.get(selectedCount);  //pull new vector from list
     currentVector.forming=false;

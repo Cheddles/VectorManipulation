@@ -30,12 +30,11 @@ class Button{
     if (selected) fill(fontActive);
     else fill(fontInactive);
     textAlign(CENTER,CENTER);
+    textSize(propHeight*height/4);
     if (label2==""){
-      textSize(propHeight*height/3);
       text(label1, xLoc*width+propWidth*width/2, yLoc*height+propHeight*height/2);
     }
     else{
-      textSize(propHeight*height/4);
       text(label1, xLoc*width+propWidth*width/2, yLoc*height+propHeight*height/3);
       text(label2, xLoc*width+propWidth*width/2, yLoc*height+propHeight*2*height/3);
     }

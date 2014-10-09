@@ -14,12 +14,13 @@ class Vector{
   //float yComp;
   color colour;  // display colour
   
-  Vector(int x, int y){
+  Vector(int x, int y, String name){
     // Transfer to class-wide variables
     float[] tempArray = new float[2];
     tempArray=screenToVector(x,y);
     xLoc=tempArray[0];
     yLoc=tempArray[1];
+    label = name;
     colour=baseColor;  //default to base colour
   } 
   
@@ -91,11 +92,35 @@ class Vector{
       }
       stroke (activeColor);
     }
-    
     drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
-    
-
-   // text(str(xLoc)+", "+str(yLoc),50,50);
+    // draw label
+    if (bearing<=PI){
+      pushMatrix();
+        translate(location[0], location[1]);
+        rotate(bearing-PI/2);
+        textAlign(CENTER, CENTER);
+        textSize(lineWeight*4);
+        fill(0);
+        if (bearing<0.5*PI){
+          text(label, value*scale/2, -lineWeight*4);
+        } else{
+          text(label, value*scale/2, lineWeight*3);
+        }
+      popMatrix();
+    } else {
+      pushMatrix();
+        translate(location[0], location[1]);
+        rotate(bearing+PI/2);
+        textAlign(CENTER, CENTER);
+        textSize(lineWeight*4);
+        fill(0);
+        if (bearing<1.5*PI){
+          text(label, -value*scale/2, lineWeight*3);
+        } else{
+          text(label, -value*scale/2, -lineWeight*4);
+        }
+      popMatrix();
+    }
   }
   
   void create (int x, int y){  // create a new vector by clicking and dragging
@@ -120,14 +145,14 @@ class Vector{
     float[] clickLoc = new float[2];  // location of mouse click in vector units
     clickLoc=screenToVector(x,y);
     float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
-    testDebug=testDebug+str(degrees(clickBearing))+". ";
+    testDebug=testDebug+str(degrees(clickBearing))+", "+str(abs(clickBearing-bearing)-(2*PI));
     float xComp=value*sin(bearing);  // x-component of vector
     float yComp=value*cos(bearing);  // y-component of vector
     
     float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
     if ((r>value/3)
         &&(r<2*value/3)
-        &&((abs(clickBearing-bearing)<PI/20)||((abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
+        &&((abs(clickBearing-bearing)<PI/20)||(abs(abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
       float m = 1/tan(bearing);  //slope of the vector
       float b = yLoc-(m*xLoc);  //y-intercept of vector
       float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
