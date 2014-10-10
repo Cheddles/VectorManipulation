@@ -58,6 +58,9 @@ class StringInput{
       currentVector.label=output;
       vectorCollection.set(selectedCount, currentVector);
     }
+    else if (title=="system units"){
+      units=output;
+    }
     bLabel.selected=false;
     bUnits.selected=false;
     entering=false;

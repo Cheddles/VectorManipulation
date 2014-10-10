@@ -124,8 +124,8 @@ void draw(){
     fill(0);
     textSize(height/40);
     textAlign(RIGHT, TOP);
-    text(testDebug, 0, 0);
-    //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+    //text(testDebug, 0, 0);
+    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
   
   if (zoom.dragging) zoom.drag();
@@ -180,13 +180,19 @@ void mousePressed(){
       bInverse.selected=false;
     }
     
-    if(bLabel.click(mouseX, mouseY)){  //check show components button
+    if(bLabel.click(mouseX, mouseY)){  //check label edit button
       foundSomething=true;
       if (vectorCollection.size()>0){
         currentVector= (Vector) vectorCollection.get(selectedCount);
         getText=new StringInput("vector label", currentVector.label);
         getText.entering=true;
       }
+    }
+    
+    if(bUnits.click(mouseX, mouseY)){  //check units edit button
+      foundSomething=true;
+      getText=new StringInput("system units", units);
+      getText.entering=true;
     }
     
     if(bUnits.click(mouseX, mouseY)){  //check show components button
