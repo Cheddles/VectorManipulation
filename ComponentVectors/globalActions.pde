@@ -66,7 +66,7 @@ void createInverse(){
     if (tempBearing>2*PI) tempBearing=tempBearing-2*PI;
     currentVector.selected=false;
     vectorCollection.set(selectedCount, currentVector);  
-    if (tempLabel=="") tempLabel = "{unnamed}";
+    if (tempLabel=="") tempLabel = "unnamed vector";
     vectorCollection.add(new Vector(tempScr[0], tempScr[1], "inverse of "+tempLabel));
     selectedCount=vectorCollection.size()-1;  //select the new vector
     currentVector=(Vector) vectorCollection.get(selectedCount);  //pull new vector from list

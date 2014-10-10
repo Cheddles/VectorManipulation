@@ -35,10 +35,10 @@ StringInput getText;  // = new StringInput;  //string input tool for vector labe
 String testDebug="deBug deFault";
 
 void setup(){
- size(horizontalSize,verticalSize);
- if (frame != null) {
+  size(horizontalSize,verticalSize);
+  if (frame != null) {
     frame.setResizable(true);
- }
+  }
   scale=200.0;
   units=" N";
   vectorCollection = new ArrayList();
@@ -103,11 +103,8 @@ void draw(){
       text("it length and direction", 0, height/8);
     popMatrix();
   }
-  if (getText.entering){
-    getText.display();
-  }
   // display mouseover text if mouse is over any buttons
-  else if (mouseX<=width/9){  // only check if the mouse is over the button column
+  if (mouseX<=width/9){  // only check if the mouse is over the button column
     bClear.hover(mouseX, mouseY);
     bDelete.hover(mouseX, mouseY);
     bShowComp.hover(mouseX, mouseY);
@@ -135,6 +132,7 @@ void draw(){
   zoom.display();
   axes.drag();
   axes.display();
+  getText.display();
   //rect(0,0,width/10,height/9);
 }
 
@@ -143,7 +141,7 @@ void mousePressed(){
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   
   // check for button clicks
-  if (mouseX<=width/9){  // only check for button clicks if the mouse is over the button column
+  if ((mouseX<=width/9)&&(!axes.selected)&&(!getText.entering)){  // only check for button clicks if the mouse is over the button column and no other adjustment mode is activated
     if(bClear.click(mouseX, mouseY)){  //check clear button
       foundSomething=true;
       deleteAll();
@@ -188,8 +186,7 @@ void mousePressed(){
         currentVector= (Vector) vectorCollection.get(selectedCount);
         getText=new StringInput("vector label", currentVector.label);
         getText.entering=true;
-        getText.display();
-      }      
+      }
     }
     
     if(bUnits.click(mouseX, mouseY)){  //check show components button
@@ -197,9 +194,9 @@ void mousePressed(){
     }
   }
   
-  if (!foundSomething) foundSomething = axes.clicked(mouseX,mouseY);
-  if ((!axes.selected)&&(!foundSomething)) foundSomething = zoom.clicked(mouseX, mouseY);
-  if ((vectorCollection.size()>0)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
+  if ((!foundSomething)&&(!getText.entering)) foundSomething = axes.clicked(mouseX,mouseY);
+  if ((!axes.selected)&&(!getText.entering)&&(!foundSomething)) foundSomething = zoom.clicked(mouseX, mouseY);
+  if ((vectorCollection.size()>0)&&(!axes.selected)&&(!getText.entering)&&(!foundSomething)){  //don't do this check if there are no vectors drawn yet
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
       currentVector.selected=false;
@@ -214,13 +211,13 @@ void mousePressed(){
       vectorCollection.set(i, currentVector);
     }
   }
-  if ((!foundSomething)&&(!axes.selected)){  // start new vector
+  if((!foundSomething)&&(!axes.selected)&&(!getText.entering)){  // start new vector
     if (selectedCount!=-1){  // deselect the previously-selected vector
       currentVector = (Vector) vectorCollection.get(vectorCollection.size()-1);
       currentVector.selected=false;
       vectorCollection.set(vectorCollection.size()-1, currentVector);
     }
-    vectorCollection.add(new Vector(mouseX, mouseY, "vector"));
+    vectorCollection.add(new Vector(mouseX, mouseY, ""));
     //testDebug="makingNew";
     selectedCount=vectorCollection.size()-1;
   }

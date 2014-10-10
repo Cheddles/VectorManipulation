@@ -15,9 +15,18 @@ class StringInput{
       rect(0,0,width,height);
       fill(0);
       textSize(height/20);
-      textAlign(CENTER);
-      text("Enter "+title, width/2, 8*height/10);
-      text(output, width/2, 9*height/10);
+      textAlign(LEFT);
+      text("Enter "+title, width*0.2, 3*height/4);
+      if ((millis()-1000*int(millis()/1000))<500){
+        text(output, width*0.2, 0.87*height);
+      } else {
+        text(output+"|", width*0.2, 0.87*height);
+      }
+      textSize(height/30);
+      fill(100);
+      text("Press [Return] or [Enter] to finish or [Escape] to cancel", width*0.2, 8*height/10);
+
+      
       
     }
   }
