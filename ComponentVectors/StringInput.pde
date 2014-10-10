@@ -23,7 +23,17 @@ class StringInput{
   }
   
   void addCharacter(char entry){
-    
+    if (key==CODED){
+      // left and right arrow behaviour here
+    } else{
+      if ((keyCode==DELETE)||(keyCode==BACKSPACE)){
+        testDebug="deleting";
+        if (output!=""){
+          output=output.substring(0,output.length()-1);
+        }
+      } else{
+        output=output+key;
+      }
+    }
   }
-  
 }

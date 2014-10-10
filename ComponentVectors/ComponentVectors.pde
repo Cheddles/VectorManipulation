@@ -178,14 +178,19 @@ void mousePressed(){
     if(bInverse.click(mouseX, mouseY)){  //check previous vector button
       //testDebug="inverting";
       foundSomething=true;
-      createInverse();
+      if (vectorCollection.size()>0) createInverse();
       bInverse.selected=false;
     }
     
-    if(bLabel.click(mouseX, mouseY)&&(selectedCount>0)){  //check show components button
+    if(bLabel.click(mouseX, mouseY)){  //check show components button
       foundSomething=true;
-      currentVector= (Vector) vectorCollection.get(selectedCount);
-      getText=new StringInput("vector label", currentVector.label);
+      if (vectorCollection.size()>0){
+        currentVector= (Vector) vectorCollection.get(selectedCount);
+        getText=new StringInput("vector label", currentVector.label);
+        getText.entering=true;
+        getText.display();
+      } else bLabel.selected=false;
+      
     }
     
     if(bUnits.click(mouseX, mouseY)){  //check show components button

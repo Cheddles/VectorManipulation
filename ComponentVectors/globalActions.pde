@@ -22,29 +22,33 @@ void deleteCurrentVector(){
 }
 
 void previousVector(){
-  currentVector= (Vector) vectorCollection.get(selectedCount);
-  currentVector.selected=false;
-  //testDebug=testDebug+str(selectedCount) + "set false";
-  vectorCollection.set(selectedCount, currentVector);
-  if (selectedCount==0) selectedCount=vectorCollection.size()-1;
-  else selectedCount--;
-  currentVector= (Vector) vectorCollection.get(selectedCount);
-  currentVector.selected=true;
-  //testDebug=testDebug+str(selectedCount) + "set true";
-  vectorCollection.set(selectedCount, currentVector);
+  if (vectorCollection.size()>0){
+    currentVector= (Vector) vectorCollection.get(selectedCount);
+    currentVector.selected=false;
+    //testDebug=testDebug+str(selectedCount) + "set false";
+    vectorCollection.set(selectedCount, currentVector);
+    if (selectedCount==0) selectedCount=vectorCollection.size()-1;
+    else selectedCount--;
+    currentVector= (Vector) vectorCollection.get(selectedCount);
+    currentVector.selected=true;
+    //testDebug=testDebug+str(selectedCount) + "set true";
+    vectorCollection.set(selectedCount, currentVector);
+  }
 }
 
 void nextVector(){
-  currentVector= (Vector) vectorCollection.get(selectedCount);
-  currentVector.selected=false;
-  //testDebug=testDebug+str(selectedCount) + "set false";
-  vectorCollection.set(selectedCount, currentVector);
-  if (selectedCount==vectorCollection.size()-1) selectedCount=0;
-  else selectedCount++;
-  currentVector= (Vector) vectorCollection.get(selectedCount);
-  currentVector.selected=true;
-  //testDebug=testDebug+str(selectedCount) + "set true";
-  vectorCollection.set(selectedCount, currentVector);
+  if (vectorCollection.size()>0){
+    currentVector= (Vector) vectorCollection.get(selectedCount);
+    currentVector.selected=false;
+    //testDebug=testDebug+str(selectedCount) + "set false";
+    vectorCollection.set(selectedCount, currentVector);
+    if (selectedCount==vectorCollection.size()-1) selectedCount=0;
+    else selectedCount++;
+    currentVector= (Vector) vectorCollection.get(selectedCount);
+    currentVector.selected=true;
+    //testDebug=testDebug+str(selectedCount) + "set true";
+    vectorCollection.set(selectedCount, currentVector);
+  }
 }
 
 void createInverse(){
@@ -62,7 +66,8 @@ void createInverse(){
     if (tempBearing>2*PI) tempBearing=tempBearing-2*PI;
     currentVector.selected=false;
     vectorCollection.set(selectedCount, currentVector);  
-    vectorCollection.add(new Vector(tempScr[0], tempScr[1], "(inverse of) "+tempLabel));
+    if (tempLabel=="") tempLabel = "{unnamed}";
+    vectorCollection.add(new Vector(tempScr[0], tempScr[1], "inverse of "+tempLabel));
     selectedCount=vectorCollection.size()-1;  //select the new vector
     currentVector=(Vector) vectorCollection.get(selectedCount);  //pull new vector from list
     currentVector.forming=false;

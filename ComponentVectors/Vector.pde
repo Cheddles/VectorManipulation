@@ -56,10 +56,14 @@ class Vector{
           else{
             drawArrow(0,0,value*scale*sin(bearing-axes.bPrime), PI/2, max(1, lineWeight/2));
           }
-          textAlign(CENTER, TOP);
+          textAlign(CENTER, CENTER);
           textSize(height/30);
           fill(xColor);
-          text(String.format("%.2f", abs((value*sin(bearing-axes.bPrime))))+units,int(0.5*value*scale*sin(bearing-axes.bPrime)),height/80);
+          if ((bearing-axes.bPrime)>PI/2&&(bearing-axes.bPrime)<1.5*PI){
+            text(String.format("%.2f", abs((value*sin(bearing-axes.bPrime))))+units,int(0.5*value*scale*sin(bearing-axes.bPrime)),-height/30);
+          } else {
+            text(String.format("%.2f", abs((value*sin(bearing-axes.bPrime))))+units,int(0.5*value*scale*sin(bearing-axes.bPrime)), height/30);
+          }
           // draw y' component vector
           stroke(yColor);
           if (cos(bearing-axes.bPrime)>0){
@@ -73,22 +77,22 @@ class Vector{
             if(bearing<=PI){
               rotate(-PI/2);
               text(String.format("%.2f", abs((value*cos(bearing-axes.bPrime))))+units,
-                  int(0.5*value*scale*cos(bearing-axes.bPrime)),int(value*scale*sin(bearing-axes.bPrime))+width/100);
+                  int(0.5*value*scale*cos(bearing-axes.bPrime)),int(value*scale*sin(bearing-axes.bPrime))+width/80);
             }
             else{
               rotate(PI/2);
               text(String.format("%.2f", abs((value*cos(bearing-axes.bPrime))))+units,
-              int(-0.5*value*scale*cos(bearing-axes.bPrime)),int(-value*scale*sin(bearing-axes.bPrime))+width/100);
+              int(-0.5*value*scale*cos(bearing-axes.bPrime)),int(-value*scale*sin(bearing-axes.bPrime))+width/80);
             }
           popMatrix();
         popMatrix();
       }
       
       if (selected){  //show vector details on top of screen
-        textSize(height/20);
+        textSize(height/30);
         textAlign(LEFT, TOP);
         fill(0);
-        text(String.format("%.2f", value)+units+" at bearing "+str(int(degrees(bearing)+0.001))+"°T", width/6, height/30);
+        text(String.format("%.2f", value)+units+" at bearing "+str(int(degrees(bearing)+0.001))+"° clockwise from vertical", width/6, height/30);
       }
       stroke (activeColor);
     }
