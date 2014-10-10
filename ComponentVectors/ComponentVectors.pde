@@ -60,7 +60,7 @@ void setup(){
 }
 
 void draw(){
-  lineWeight = max(2,int(float(width/150)));  // set line weight for all vector arrows
+  lineWeight = min(5,max(2,int(float(width/150))));  // set line weight for all vector arrows
   background(255);
 
   // display button controls
@@ -139,7 +139,7 @@ void draw(){
 }
 
 void mousePressed(){
-  testDebug="";
+  //testDebug="";
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   
   // check for button clicks
@@ -189,8 +189,7 @@ void mousePressed(){
         getText=new StringInput("vector label", currentVector.label);
         getText.entering=true;
         getText.display();
-      } else bLabel.selected=false;
-      
+      }      
     }
     
     if(bUnits.click(mouseX, mouseY)){  //check show components button

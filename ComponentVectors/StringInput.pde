@@ -27,13 +27,30 @@ class StringInput{
       // left and right arrow behaviour here
     } else{
       if ((keyCode==DELETE)||(keyCode==BACKSPACE)){
-        testDebug="deleting";
-        if (output!=""){
+        if (output.length()==1){
+          output="";
+        } else if (output!=""){
           output=output.substring(0,output.length()-1);
         }
-      } else{
+      } else if ((keyCode == RETURN)||(keyCode == ENTER)){
+        accept();
+      } else if (keyCode==ESC){
+        key=0;
+        bLabel.selected=false;
+        entering=false;
+      } else if ((int(key)>=32)&&(int(key)<=126)) {  // all "regular" characters
         output=output+key;
       }
     }
+  }
+  
+  void accept(){  // accept the current value of output and pass to calling variable
+    if (title=="vector label"){
+      currentVector.label=output;
+      vectorCollection.set(selectedCount, currentVector);
+    }
+    bLabel.selected=false;
+    bUnits.selected=false;
+    entering=false;
   }
 }

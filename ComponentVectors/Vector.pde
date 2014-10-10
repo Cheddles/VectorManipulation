@@ -149,7 +149,7 @@ class Vector{
     float[] clickLoc = new float[2];  // location of mouse click in vector units
     clickLoc=screenToVector(x,y);
     float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
-    testDebug=testDebug+str(degrees(clickBearing))+", "+str(abs(clickBearing-bearing)-(2*PI));
+    //testDebug=testDebug+str(degrees(clickBearing))+", "+str(abs(clickBearing-bearing)-(2*PI));
     float xComp=value*sin(bearing);  // x-component of vector
     float yComp=value*cos(bearing);  // y-component of vector
     
