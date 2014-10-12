@@ -63,17 +63,6 @@ void draw(){
   lineWeight = min(5,max(2,int(float(width/150))));  // set line weight for all vector arrows
   background(255);
 
-  // display button controls
-  bClear.display();
-  bDelete.display();
-  bShowComp.display();
-  bShowBearing.display();
-  bPrev.display();
-  bNext.display();
-  bInverse.display();
-  bLabel.display();
-  bUnits.display();
-  
  if (vectorCollection.size()>0){
     currentVector= (Vector) vectorCollection.get(vectorCollection.size()-1);
     if(currentVector.forming) {
@@ -103,19 +92,6 @@ void draw(){
       text("it length and direction", 0, height/8);
     popMatrix();
   }
-  // display mouseover text if mouse is over any buttons
-  if (mouseX<=width/9){  // only check if the mouse is over the button column
-    bClear.hover(mouseX, mouseY);
-    bDelete.hover(mouseX, mouseY);
-    bShowComp.hover(mouseX, mouseY);
-    bShowBearing.hover(mouseX, mouseY);
-    bPrev.hover(mouseX, mouseY);
-    bNext.hover(mouseX, mouseY);
-    bInverse.hover(mouseX, mouseY);
-    bLabel.hover(mouseX, mouseY);
-    bUnits.hover(mouseX, mouseY);
-  }
-  
   
   // assign attribution and provide link for feedback
   pushMatrix();
@@ -127,6 +103,33 @@ void draw(){
     //text(testDebug, 0, 0);
     text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
+  
+  // display mouseover text if mouse is over any buttons
+  if (mouseX<=width/9){  // only check if the mouse is over the button column
+    fill(255,255,255,220);
+    strokeWeight(0);
+    rect(0,0,width,height);
+    bClear.hover(mouseX, mouseY);
+    bDelete.hover(mouseX, mouseY);
+    bShowComp.hover(mouseX, mouseY);
+    bShowBearing.hover(mouseX, mouseY);
+    bPrev.hover(mouseX, mouseY);
+    bNext.hover(mouseX, mouseY);
+    bInverse.hover(mouseX, mouseY);
+    bLabel.hover(mouseX, mouseY);
+    bUnits.hover(mouseX, mouseY);
+  }
+  
+  // display button controls
+  bClear.display();
+  bDelete.display();
+  bShowComp.display();
+  bShowBearing.display();
+  bPrev.display();
+  bNext.display();
+  bInverse.display();
+  bLabel.display();
+  bUnits.display();
   
   if (zoom.dragging) zoom.drag();
   zoom.display();

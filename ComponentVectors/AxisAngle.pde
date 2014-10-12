@@ -122,7 +122,7 @@ class AxisAngle{
       textAlign(CENTER, CENTER);
       textSize(height/12);
       fill(0);
-      text(int(degrees(bPrime)+0.001)+"°T",0,4*radius/3);
+      text(int(degrees(bPrime)+0.001)+"°",0,4*radius/3);
 //      fill(0,255,0);
 //      ellipse(-radius/2,2*radius, radius/4, radius/4);
 //      fill(255,0,0);

@@ -8,8 +8,8 @@ class Button{
   String label2;  //label for button (second line - leave as "" for single-line button)
   String hoverText;  //text that shows when the mouse is over the button
   boolean selected;  //whether button is selected (persistant toggle)
-  color bgActive = color(255,150,255);  // background colour when active
-  color bgInactive= color(240);  // background colour when inactive
+  color bgActive = color(255,200,255,220);  // background colour when active
+  color bgInactive= color(230,230,230,220);  // background colour when inactive
   color fontActive=color(0);  // font colour when active;
   color fontInactive=color(0);  // font colour when inactive
   
@@ -26,6 +26,8 @@ class Button{
   void display(){
     if (selected) fill(bgActive);
     else fill(bgInactive);
+    stroke(0);
+    strokeWeight(1);
     rect(xLoc*width, yLoc*height, propWidth*width, propHeight*height);
     if (selected) fill(fontActive);
     else fill(fontInactive);
