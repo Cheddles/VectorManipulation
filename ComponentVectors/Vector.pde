@@ -97,6 +97,17 @@ class Vector{
       stroke (activeColor);
     }
     drawArrow(location[0], location[1], value*scale, bearing, lineWeight);
+    if (contains(mouseX, mouseY)){  //draw highlight  over grabbable area
+      pushMatrix();
+        translate(location[0], location[1]);
+        rotate(bearing);
+        strokeWeight(1.5*lineWeight);
+        stroke(125,127,255);
+        line(0,-0.25*value*scale,0,-0.75*value*scale);
+        cursor(HAND);
+      popMatrix();
+    }
+    else cursor(ARROW);
     // draw label
     if (bearing<=PI){
       pushMatrix();
@@ -145,31 +156,43 @@ class Vector{
     yLoc = mouseLoc[1]-dragOffsetY;
   }
   
-  boolean click (int x, int y){  // determine if the vector has been clicked on to select/drag (middle 1/3 only)
-    float[] clickLoc = new float[2];  // location of mouse click in vector units
-    clickLoc=screenToVector(x,y);
-    float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
-    //testDebug=testDebug+str(degrees(clickBearing))+", "+str(abs(clickBearing-bearing)-(2*PI));
-    float xComp=value*sin(bearing);  // x-component of vector
-    float yComp=value*cos(bearing);  // y-component of vector
+  boolean click (int x, int y){  // determine if the vector has been clicked on to select/drag (middle 1/2 only)
     
-    float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
-    if ((r>value/3)
-        &&(r<2*value/3)
-        &&((abs(clickBearing-bearing)<PI/20)||(abs(abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/3 and 2/3 of the arrow length from the base
-      float m = 1/tan(bearing);  //slope of the vector
-      float b = yLoc-(m*xLoc);  //y-intercept of vector
-      float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
-            
-      if (abs(d*scale)<(2*lineWeight)){
-        dragOffsetX=clickLoc[0]-xLoc;
-        dragOffsetY=clickLoc[1]-yLoc;
-        dragging=true;
-        selected=true;
-        return true;
-      }
+    if (contains(x, y)){
+      float[] clickLoc = new float[2];  // location of mouse click in vector units
+      clickLoc=screenToVector(x,y);
+      dragOffsetX=clickLoc[0]-xLoc;
+      dragOffsetY=clickLoc[1]-yLoc;
+      dragging=true;
+      selected=true;
+      return true;
+    } else{
+      return false;
     }
-    return false;
+//    float[] clickLoc = new float[2];  // location of mouse click in vector units
+//    clickLoc=screenToVector(x,y);
+//    float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
+//    //testDebug=testDebug+str(degrees(clickBearing))+", "+str(abs(clickBearing-bearing)-(2*PI));
+//    float xComp=value*sin(bearing);  // x-component of vector
+//    float yComp=value*cos(bearing);  // y-component of vector
+//    
+//    float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
+//    if ((r>value*0.25)
+//        &&(r<value*0.75)
+//        &&((abs(clickBearing-bearing)<PI/20)||(abs(abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/4 and 3/4 of the arrow length from the base
+//      float m = 1/tan(bearing);  //slope of the vector
+//      float b = yLoc-(m*xLoc);  //y-intercept of vector
+//      float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
+//            
+//      if (abs(d*scale)<(2*lineWeight)){
+//        dragOffsetX=clickLoc[0]-xLoc;
+//        dragOffsetY=clickLoc[1]-yLoc;
+//        dragging=true;
+//        selected=true;
+//        return true;
+//      }
+//    }
+//    return false;
   }
   
   void drawArrow(int x1, int y1, float arrowLength, float angle, int weight){
@@ -227,6 +250,29 @@ class Vector{
       line(radius,0,radius*(1+min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
       line(radius,0,radius*(1-min(0.25,arcAngle/4)),-radius*min(0.25,arcAngle/4));
     popMatrix();
+  }
+  
+  boolean contains(int x, int y){ //test if a point is over the "hot zone" of a vector
+    boolean returnValue=false;  //start with default of not hovering over hot zone
+    float[] clickLoc = new float[2];  // location of mouse click in vector units
+    clickLoc=screenToVector(x,y);
+    float clickBearing=findBearing(clickLoc[0]-xLoc,clickLoc[1]-yLoc);
+    float xComp=value*sin(bearing);  // x-component of vector
+    float yComp=value*cos(bearing);  // y-component of vector
+    
+    float r=pow(pow(xLoc-clickLoc[0],2)+pow(yLoc-clickLoc[1],2),0.5);  // distance of click from vector base
+    if ((r>value*0.25)
+        &&(r<value*0.75)
+        &&((abs(clickBearing-bearing)<PI/20)||(abs(abs(clickBearing-bearing)-(2*PI))<PI/20))){  // check that mouse click is between 1/4 and 3/4 of the arrow length from the base
+      float m = 1/tan(bearing);  //slope of the vector
+      float b = yLoc-(m*xLoc);  //y-intercept of vector
+      float d = (clickLoc[0]-(clickLoc[1]-b)/m)*sin(PI/2-bearing);
+            
+      if (abs(d*scale)<(2*lineWeight)){
+        returnValue=true;
+      }
+    }
+    return returnValue;
   }
 
 }
