@@ -31,7 +31,7 @@ void previousVector(){
     else selectedCount--;
     currentVector= (Vector) vectorCollection.get(selectedCount);
     currentVector.selected=true;
-    //testDebug=testDebug+str(selectedCount) + "set true";
+    testDebug= str(selectedCount) + " selected of "+str(vectorCollection.size())+"'"+str(degrees(currentVector.bearing))+currentVector.label;
     vectorCollection.set(selectedCount, currentVector);
   }
 }
@@ -46,7 +46,7 @@ void nextVector(){
     else selectedCount++;
     currentVector= (Vector) vectorCollection.get(selectedCount);
     currentVector.selected=true;
-    //testDebug=testDebug+str(selectedCount) + "set true";
+    testDebug= str(selectedCount) + " selected of "+str(vectorCollection.size())+"'"+str(degrees(currentVector.bearing))+currentVector.label;
     vectorCollection.set(selectedCount, currentVector);
   }
 }
@@ -75,4 +75,10 @@ void createInverse(){
     currentVector.value=tempSize;
     vectorCollection.set(selectedCount, currentVector);  //push inverted matrix to the end of the list
   }
+}
+
+void jump(){ //debugging method to jump a vector 1 unit to the right
+  currentVector=(Vector) vectorCollection.get(selectedCount);  //pull selected vector from list
+  currentVector.xLoc=currentVector.xLoc+1;
+  vectorCollection.set(selectedCount, currentVector);
 }

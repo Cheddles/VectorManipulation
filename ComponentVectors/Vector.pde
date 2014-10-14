@@ -104,10 +104,10 @@ class Vector{
         strokeWeight(1.5*lineWeight);
         stroke(125,127,255);
         line(0,-0.25*value*scale,0,-0.75*value*scale);
-        cursor(HAND);
+        //cursor(HAND);
       popMatrix();
     }
-    else cursor(ARROW);
+    //else cursor(ARROW);
     // draw label
     if (bearing<=PI){
       pushMatrix();

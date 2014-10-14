@@ -24,10 +24,7 @@ class StringInput{
       }
       textSize(height/30);
       fill(100);
-      text("Press [Return] or [Enter] to finish or [Escape] to cancel", width*0.2, 8*height/10);
-
-      
-      
+      text("Press [Return] or [Enter] to finish or [Escape] to cancel "+str(selectedCount), width*0.2, 8*height/10);
     }
   }
   
@@ -55,7 +52,9 @@ class StringInput{
   
   void accept(){  // accept the current value of output and pass to calling variable
     if (title=="vector label"){
+      currentVector= (Vector) vectorCollection.get(selectedCount);
       currentVector.label=output;
+      //currentVector.selected=true;
       vectorCollection.set(selectedCount, currentVector);
     }
     else if (title=="system units"){

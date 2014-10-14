@@ -7,7 +7,7 @@ int verticalSize=600;  // horizontal size of the screen
 int lineWeight;  // weight of component vector
 boolean clickedOnce=false; // (will need this per on-screen object)
 ArrayList vectorCollection;
-int selectedCount=-1;  // current vector number within vectorCollection
+int selectedCount;  // current vector number within vectorCollection
 Vector currentVector;  // the vector currently selected and being manipulated (pushed into vectorCollection)
 Vector currentVector2;  // another holding vector;
 AxisAngle axes;  // tool to select bearing of the reference axes to calculate component vectors
@@ -56,6 +56,7 @@ void setup(){
   bInverse = new Button(0*buttonWidth, 5*buttonHeight, buttonWidth, buttonHeight, "Create", "inverse", "Create an inverse of the selected vector");
   bLabel = new Button(0*buttonWidth, 6*buttonHeight, buttonWidth, buttonHeight, "Label", "", "Edit vector label");
   bUnits = new Button(0*buttonWidth, 7*buttonHeight, buttonWidth, buttonHeight, "Units", "", "Enter units (changes for all vectors)");
+  selectedCount=-1;
   //currentVector = new Vector();
 }
 
@@ -100,8 +101,9 @@ void draw(){
     fill(0);
     textSize(height/40);
     textAlign(RIGHT, TOP);
-    //text(testDebug, 0, 0);
-    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+    text(testDebug, 0, 0);
+    //text(str(selectedCount),0,0);
+    //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
   
   // display mouseover text if mouse is over any buttons
@@ -137,10 +139,22 @@ void draw(){
   axes.display();
   getText.display();
   //rect(0,0,width/10,height/9);
+  
+  // temp debugging display
+  if (selectedCount>-1){
+    textSize(15);
+    fill(0);
+    textAlign(RIGHT);
+    for (int i=0; i<vectorCollection.size(); i++){
+      currentVector= (Vector) vectorCollection.get(i);
+      if (currentVector.selected==true) fill(0,100,0);
+      else fill(0);
+      text(str(i)+", "+str(currentVector.xLoc)+", "+str(currentVector.yLoc)+", "+str(currentVector.value)+", "+str(currentVector.bearing), 790, (i+4)*20);
+    }
+  }
 }
 
 void mousePressed(){
-  //testDebug="";
   boolean foundSomething=false;  // switch to draw a new vector if nothing else is being clicked
   
   // check for button clicks
@@ -177,7 +191,6 @@ void mousePressed(){
     }
     
     if(bInverse.click(mouseX, mouseY)){  //check previous vector button
-      //testDebug="inverting";
       foundSomething=true;
       if (vectorCollection.size()>0) createInverse();
       bInverse.selected=false;
@@ -186,8 +199,11 @@ void mousePressed(){
     if(bLabel.click(mouseX, mouseY)){  //check label edit button
       foundSomething=true;
       if (vectorCollection.size()>0){
+        currentVector = new Vector(0,0,"");
         currentVector= (Vector) vectorCollection.get(selectedCount);
-        getText=new StringInput("vector label", currentVector.label);
+        //testDebug=str(selectedCount)+str(degrees(currentVector.bearing));
+        //getText=new StringInput("vector label", currentVector.label);
+        getText=new StringInput("vector label", str(selectedCount));
         getText.entering=true;
       }
     }
@@ -209,11 +225,11 @@ void mousePressed(){
     for (int i=0; i<vectorCollection.size(); i++){
       currentVector= (Vector) vectorCollection.get(i);
       currentVector.selected=false;
+      //currentVector.dragging=false;
       if (!foundSomething){  //only check for clicks if a vector hasn't already been selected
-        testDebug=testDebug+str(i)+", ";
         foundSomething=currentVector.click(mouseX, mouseY);  //select a vector if clicked on and stop new vector creation
-        //testDebug=testDebug+"found vector "+str(i);
-         if (foundSomething){
+        //testDebug="found vector "+str(i);
+        if (foundSomething){
           selectedCount=i;  //note which vector is selected
         }
       }
@@ -265,6 +281,9 @@ void keyPressed() {
     }
     if ((keyCode == BACKSPACE)||(keyCode == DELETE)) {
       deleteCurrentVector();
+    }
+    if (key=='j'){
+      jump();
     }
   }
     
