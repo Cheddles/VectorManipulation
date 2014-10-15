@@ -101,9 +101,9 @@ void draw(){
     fill(0);
     textSize(height/40);
     textAlign(RIGHT, TOP);
-    text(testDebug, 0, 0);
+    //text(testDebug, 0, 0);
     //text(str(selectedCount),0,0);
-    //text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
+    text("Suggestions and feedback to Chris.Heddles@asms.sa.edu.au", 0, 0);
   popMatrix();
   
   // display mouseover text if mouse is over any buttons
@@ -141,17 +141,17 @@ void draw(){
   //rect(0,0,width/10,height/9);
   
   // temp debugging display
-  if (selectedCount>-1){
-    textSize(15);
-    fill(0);
-    textAlign(RIGHT);
-    for (int i=0; i<vectorCollection.size(); i++){
-      currentVector= (Vector) vectorCollection.get(i);
-      if (currentVector.selected==true) fill(0,100,0);
-      else fill(0);
-      text(str(i)+", "+str(currentVector.xLoc)+", "+str(currentVector.yLoc)+", "+str(currentVector.value)+", "+str(currentVector.bearing), 790, (i+4)*20);
-    }
-  }
+//  if (selectedCount>-1){
+//    textSize(15);
+//    fill(0);
+//    textAlign(RIGHT);
+//    for (int i=0; i<vectorCollection.size(); i++){
+//      currentVector= (Vector) vectorCollection.get(i);
+//      if (currentVector.selected==true) fill(0,100,0);
+//      else fill(0);
+//      text(str(i)+", "+str(currentVector.xLoc)+", "+str(currentVector.yLoc)+", "+str(currentVector.value)+", "+str(currentVector.bearing), 790, (i+4)*20);
+//    }
+//  }
 }
 
 void mousePressed(){
@@ -202,8 +202,8 @@ void mousePressed(){
         currentVector = new Vector(0,0,"");
         currentVector= (Vector) vectorCollection.get(selectedCount);
         //testDebug=str(selectedCount)+str(degrees(currentVector.bearing));
-        //getText=new StringInput("vector label", currentVector.label);
-        getText=new StringInput("vector label", str(selectedCount));
+        getText=new StringInput("vector label", currentVector.label);
+        //getText=new StringInput("vector label", str(selectedCount));
         getText.entering=true;
       }
     }
@@ -282,9 +282,9 @@ void keyPressed() {
     if ((keyCode == BACKSPACE)||(keyCode == DELETE)) {
       deleteCurrentVector();
     }
-    if (key=='j'){
-      jump();
-    }
+//    if (key=='j'){
+//      jump();
+//    }
   }
     
 //  if (keyCode == BACKSPACE) {
