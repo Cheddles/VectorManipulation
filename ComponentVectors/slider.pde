@@ -82,18 +82,7 @@ class Slider{
       
       //convert location to scale value
       scale = float(newloc-xmin)/float(xmax-xmin)*(max-min)+min;
-      testDebug=str(scale);
     }
-  
-//  void hover(int mx, int my) {
-//    float d = pow(pow(mx-xpos,2)+pow(my-ypos,2),0.5);
-//    if (d < ballDiameter) {
-//      mouseOver = true;
-//    }
-//    else {
-//      mouseOver = false;
-//    }
-//  }
   
   void drawArrow(){
     int ypix = int(ypos*height);
